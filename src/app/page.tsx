@@ -177,27 +177,28 @@ export default function HomePage() {
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
               {[
-                {
-                number: "1",
-                title: "Discover with AI",
-                description: "AI analyzes your preferences and suggests perfect local businesses instantly.",
-                },
-                {
-                number: "2",
-                title: "Get matched fast",
-                description: "Show up instantly to qualified businesses through Nexa's AI-driven matching.",
-                },
-                {
-                number: "3",
-                title: "Control the experience",
-                description: "You own the conversation — shape how businesses see you by customizing your profile.",
-                },
-                {
-                number: "4",
-                title: "Act on opportunities",
-                description: "Track business responses, spot great deals, and sharpen your negotiation edge.",
-                },
-              ].map((step, index) => (
+  {
+    number: "1",
+    title: "Discover with AI",
+    description: "Find businesses that fit your style, powered by smart, preference-based AI discovery.",
+  },
+  {
+    number: "2",
+    title: "Connect instantly",
+    description: "Start conversations with local vendors who match your needs in real-time, effortlessly.",
+  },
+  {
+    number: "3",
+    title: "Negotiate your way",
+    description: "Agree on pricing, offers, or terms — directly inside Nexa, no middleman or delays.",
+  },
+  {
+    number: "4",
+    title: "Book and follow up",
+    description: "Lock in your order, track the response, and keep things smooth from chat to checkout.",
+  },
+]
+.map((step, index) => (
                 <div
                 key={index}
                 className="text-center transition-transform transform hover:-translate-y-2"
@@ -340,38 +341,41 @@ export default function HomePage() {
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
                 {[
-                  {
-                    number: "1",
-                    title: "Launch your business",
-                    description:
-                      "List directly or sync your existing profiles. Nexa turns your business into dynamic, conversational listings.",
-                  },
-                  {
-                    number: "2",
-                    title: "Get discovered fast",
-                    description:
-                      "Show up instantly to qualified customers through Nexa's AI-driven local discovery engine.",
-                  },
-                  {
-                    number: "3",
-                    title: "Control the narrative",
-                    description:
-                      "You own the conversation — shape how customers see you by customizing your business story.",
-                  },
-                  {
-                    number: "4",
-                    title: "Act on customer signals",
-                    description: "Track customer inquiries, spot demand patterns, and sharpen your competitive edge.",
-                  },
-                ].map((step, index) => (
-                  <div key={index} className="text-center">
-                    <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-700">
-                      <span className="text-white font-bold">{step.number}</span>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
-                    <p className="text-gray-400 leading-relaxed">{step.description}</p>
-                  </div>
-                ))}
+  {
+    number: "1",
+    title: "Launch your business",
+    description: "List your services or sync existing links — Nexa builds your smart digital storefront fast.",
+  },
+  {
+    number: "2",
+    title: "Get discovered fast",
+    description: "Reach nearby buyers searching for your service through Nexa’s AI-powered engine.",
+  },
+  {
+    number: "3",
+    title: "Own your brand voice",
+    description: "Edit your page, set your banner, and share offers that shape how customers see you.",
+  },
+  {
+    number: "4",
+    title: "Respond and grow",
+    description: "Track inquiries, pricing trends, and customer demand through Nexa-AI insights daily.",
+  },
+]
+.map((step, index) => (
+                  <div
+                key={index}
+                className="text-center transition-transform transform hover:-translate-y-2"
+                >
+                <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#05BBC8] shadow-[0_0_0_4px_rgba(5,187,200,0.15)]">
+                  <span className="text-white font-bold">{step.number}</span>
+                </div>
+                <div className="rounded-2xl border-2 border-[#05BBC8] bg-gray-900 p-6 shadow-lg hover:shadow-[0_4px_24px_0_rgba(5,187,200,0.25)] transition-all duration-300">
+                  <h3 className="text-xl font-semibold mb-4 text-[#05BBC8]">{step.title}</h3>
+                  <p className="text-gray-300 leading-relaxed">{step.description}</p>
+                </div>
+                </div>
+              ))}
               </div>
             </div>
           </section>
@@ -539,7 +543,7 @@ export default function HomePage() {
           </div>
 
           <div className="flex justify-between items-center mt-12 pt-8 border-t border-gray-800">
-            <p className="text-gray-500 text-sm">2024 Nexa Group, Inc All Rights Reserved.</p>
+            <p className="text-gray-500 text-sm">2025 Nexa Group, Inc All Rights Reserved.</p>
             <div className="flex space-x-6 text-sm text-gray-500">
               <a href="#" className="hover:text-white transition-colors">
                 Terms of Service
