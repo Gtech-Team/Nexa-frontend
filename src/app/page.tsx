@@ -79,10 +79,8 @@ export default function HomePage() {
           <BusinessCategoriesSection />
 
           {/* Company Logos Scroll */}
-          <CompanyLogosSection />
-
-          {/* Process Steps */}
-          <section className="py-32 px-6 relative">
+          <CompanyLogosSection />          {/* Process Steps */}
+          <section className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 relative">
             <div className="max-w-7xl mx-auto">
               <ProcessSteps steps={usersSteps} />
 
@@ -94,10 +92,8 @@ export default function HomePage() {
       ) : (
         <>
           {/* Business Hero Section */}
-          <BusinessHeroSection />
-
-          {/* Business Process Steps */}
-          <section className="py-32 px-6 relative">
+          <BusinessHeroSection />          {/* Business Process Steps */}
+          <section className="pt-6 sm:pt-8 md:pt-10 pb-8 sm:pb-8 md:pb-10 px-4 sm:px-6 relative">
             <div className="max-w-7xl mx-auto">
               <ProcessSteps steps={businessSteps} />
             </div>
