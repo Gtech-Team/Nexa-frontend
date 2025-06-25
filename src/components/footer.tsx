@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function Footer() {
   return (
     <footer className="py-12 sm:py-16 px-4 sm:px-6 border-t border-gray-800 relative">
@@ -10,7 +12,16 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
           <div className="text-center sm:text-left">
-            <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Find Connect Negotiate & Grow™</h3>
+            <Image
+                src="/nexa-favicon.png"
+                alt="Nexa Logo"
+                width={80}
+                height={80}
+                className="mx-auto sm:mx-0 mb-4 sm:mb-6 w-20 h-20 object-contain"
+            />
+            <p className="text-gray-400 text-sm sm:text-base mb-4 sm:mb-6">
+              Nigeria&#39;s #1 AI-powered local commerce platform™.
+            </p>
             <div className="flex justify-center sm:justify-start space-x-3 sm:space-x-4">
               <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
                 <span className="text-xs">IG</span>
@@ -64,6 +75,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Business Dashboard
+                  </a>
+                </li>
+              <li>
                 <a href="#" className="hover:text-white transition-colors">
                   AI Analytics
                 </a>
@@ -76,26 +92,14 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="text-center sm:text-left">
-            <h4 className="font-semibold mb-3 sm:mb-4">Nexa</h4>
-            <ul className="space-y-1.5 sm:space-y-2 text-gray-400 text-sm sm:text-base">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
+             <div className="text-center sm:text-left">
+              <h4 className="font-semibold mb-4 text-white">Contact</h4>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li>hello@nexa.ng</li>
+                <li>+234 (0) 800 NEXA</li>
+                <li>Port Harcourt, Nigeria</li>
+              </ul>
+            </div>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-800 gap-4 sm:gap-0">

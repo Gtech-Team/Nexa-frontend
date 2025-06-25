@@ -1,18 +1,28 @@
-import type React from "react"
-import type { Metadata } from "next"
-import "./globals.css"
-
-// const inter = Inter({ subsets: ["latin"] })
+import type React from "react";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import "./globals.css";
 
 export const metadata: Metadata = {
+  icons: {
+icon: "/nexa-favicon.png",
+},
   title: "Nexa - Nigeria's #1 AI Local Business Platform",
   description:
     "AI-powered local commerce platform connecting users with businesses across Nigeria. Discover, book, and engage with local services effortlessly.",
-  keywords: ["AI", "local commerce", "Nigeria", "business discovery", "booking platform"],
+  keywords: [
+    "AI",
+    "local commerce",
+    "e-commerce",
+    "Nigeria",
+    "business discovery",
+    "booking platform",
+  ],
   authors: [{ name: "Nexa Team" }],
   openGraph: {
     title: "Nexa - Nigeria's #1 AI Local Commerce Platform",
-    description: "AI-powered local commerce platform connecting users with businesses across Nigeria.",
+    description:
+      "AI-powered local commerce platform connecting users with businesses across Nigeria.",
     url: "https://nexa.ng",
     siteName: "Nexa",
     locale: "en_NG",
@@ -21,7 +31,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Nexa - Nigeria's #1 AI Local Business Platform",
-    description: "AI-powered local commerce platform connecting users with businesses across Nigeria.",
+    description:
+      "AI-powered local commerce platform connecting users with businesses across Nigeria.",
   },
   robots: {
     index: true,
@@ -34,16 +45,18 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Suspense fallback={<div>Loading Nexa...</div>}>{children}</Suspense>
+      </body>
     </html>
-  )
+  );
 }

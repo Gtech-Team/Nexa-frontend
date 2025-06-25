@@ -1,10 +1,6 @@
 "use client"
 
 import { useState } from "react"
-// import { Badge } from "@/components/ui/badge"
-// import { Button } from "@/components/ui/button"
-// import { ArrowLeft } from "lucide-react"
-// import Link from "next/link"
 
 // Import modular components
 import AIRecommendations from "@/components/business/ai-recommendations"
@@ -102,7 +98,10 @@ export default function FindBusinessPage() {
   }
 
   return (
+    
     <div className="min-h-screen bg-gray-50">
+    {/* <Navigation activeView={activeView} setActiveView={setActiveView} /> */}
+        
       {/* Header */}
       <PageHeader
         title="Find a Business"

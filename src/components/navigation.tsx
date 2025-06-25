@@ -1,6 +1,8 @@
 "use client"
 
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 interface NavigationProps {
   activeView: "users" | "business"
@@ -11,12 +13,19 @@ export default function Navigation({ activeView, setActiveView }: NavigationProp
   return (
     <nav className="relative z-50 border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#05BBC8] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xs sm:text-sm">N</span>
-            </div>
+        <div className="flex justify-between items-center h-16 md:h-20 pl-2">
+          <div className="flex items-center space-x-2 sm:space-x-3 pl-2">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center pl-2">
+              <Image
+                src="/nexa-favicon.png"
+                alt="Nexa Logo"
+                width={30}
+                height={30}
+                // className="w-8 h-8 sm:w-6 sm:h-6 object-contain"
+                priority
+              />
             <span className="text-lg sm:text-xl font-semibold text-white">Nexa</span>
+            </div>
           </div>
 
           {/* Center Toggle - Hidden on mobile, shown on tablet+ */}
@@ -62,16 +71,22 @@ export default function Navigation({ activeView, setActiveView }: NavigationProp
 
           <div className="flex items-center space-x-2 sm:space-x-4">
             <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-medium px-3 sm:px-6 py-2 text-xs sm:text-sm">
-              <span className="hidden sm:inline">
-                <a href="/find-business" className="block w-full h-full">
-                  {activeView === "users" ? "Find Businesses" : "List Your Business"}
-                </a>
-              </span>
-              <span className="sm:hidden">
-                <a href="/find-business" className="block w-full h-full">
-                  {activeView === "users" ? "Find" : "List"}
-                </a>
-              </span>
+            <span className="hidden sm:inline">
+                <Link
+                    href={activeView === "users" ? "/find-business" : "/list-business"}
+                    className="block w-full h-full"
+                >
+                    {activeView === "users" ? "Find Businesses" : "List Your Business"}
+                </Link>
+            </span>
+            <span className="sm:hidden">
+                <Link
+                    href={activeView === "users" ? "/find-business" : "/list-business"}
+                    className="block w-full h-full"
+                >
+                    {activeView === "users" ? "Find" : "List"}
+                </Link>
+            </span>
             </Button>
           </div>
         </div>
