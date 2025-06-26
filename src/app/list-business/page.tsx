@@ -121,16 +121,8 @@ function TestimonialSlider() {
 }
 
 export default function ListBusinessPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading] = useState(false)
 
-  const handleGetStarted = () => {
-    setIsLoading(true)
-    // Simulate navigation to onboarding flow
-    setTimeout(() => {
-      alert("This would redirect to the business registration flow!")
-      setIsLoading(false)
-    }, 1000)
-  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -143,7 +135,7 @@ export default function ListBusinessPage() {
       
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-32 px-6 overflow-hidden">
+      <section className="relative pt-20 pb-22 px-6 overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 800">
@@ -171,23 +163,27 @@ export default function ListBusinessPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
-            <Button
-              onClick={handleGetStarted}
-              disabled={isLoading}
-              className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-semibold px-12 py-4 text-lg rounded-xl"
-            >
-              {isLoading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                  <span>Getting Started...</span>
-                </div>
-              ) : (
-                <>
-                  Get Started for Free
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </>
-              )}
-            </Button>
+            <Link href="/business-onboarding" passHref legacyBehavior>
+              <Button
+                asChild
+                disabled={isLoading}
+                className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-semibold px-12 py-4 text-lg rounded-xl"
+              >
+                <a>
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                      <span>Getting Started...</span>
+                    </div>
+                  ) : (
+                    <>
+                      Get Started for Free
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </a>
+              </Button>
+            </Link>
             <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-800 px-8 py-4 text-lg">
               Watch Demo
             </Button>
@@ -238,7 +234,7 @@ export default function ListBusinessPage() {
       </section>
 
       {/* Why List on Nexa */}
-      <section className="py-24 px-6 relative">
+      <section className="py-14 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Why List on Nexa?</h2>
@@ -286,7 +282,7 @@ export default function ListBusinessPage() {
       </section>
 
       {/* Testimonial */}
-      <section className="py-16 px-6">
+      <section className="py-10 px-6">
         <div className="max-w-4xl mx-auto">
           <TestimonialSlider />
         </div>
@@ -311,23 +307,27 @@ export default function ListBusinessPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
-            <Button
-              onClick={handleGetStarted}
-              disabled={isLoading}
-              className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-semibold px-12 py-4 text-lg rounded-xl"
-            >
-              {isLoading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                  <span>Creating Profile...</span>
-                </div>
-              ) : (
-                <>
-                  Create My Profile Now
-                  <TrendingUp className="w-5 h-5 ml-2" />
-                </>
-              )}
-            </Button>
+            <Link href="/business-onboarding" passHref legacyBehavior>
+              <Button
+                asChild
+                disabled={isLoading}
+                className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-semibold px-12 py-4 text-lg rounded-xl"
+              >
+                <a>
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                      <span>Creating Profile...</span>
+                    </div>
+                  ) : (
+                    <>
+                      Create My Profile Now
+                      <TrendingUp className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </a>
+              </Button>
+            </Link>
             <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-800 px-8 py-4 text-lg">
               Talk to Sales
             </Button>

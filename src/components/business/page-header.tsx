@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, User } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -92,6 +92,13 @@ export default function PageHeader({
                         <Badge variant="outline" className="text-[#05BBC8] border-[#05BBC8] text-xs sm:text-sm">
                             {favoritesCount} Saved
                         </Badge>
+                        <Link href="/user-login">
+                            <Button variant="ghost" size="icon" className="ml-2" title="Login or Register">
+                                {/* Lucide User Icon */}
+                                <span className="sr-only">Login or Register</span>
+                                <User className="w-12 h-12 text-gray-500" />
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

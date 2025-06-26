@@ -11,6 +11,8 @@ import AIHelperButton from "@/components/business/ai-helper-button"
 import PromotionBanner from "@/components/business/promotion-banner"
 import Pagination from "@/components/business/pagination"
 import PageHeader from "@/components/business/page-header"
+import Footer from "@/components/footer"
+
 
 // Import types and data
 import type { Filters } from "@/types/business"
@@ -157,6 +159,10 @@ export default function FindBusinessPage() {
 
       {/* AI Helper Button */}
       <AIHelperButton />
+
+
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

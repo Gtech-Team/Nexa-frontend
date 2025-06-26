@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="py-12 sm:py-16 px-4 sm:px-6 border-t border-gray-800 relative">
+    <footer className="py-12 sm:py-16 px-4 sm:px-6 border-t border-gray-800 bg-black relative">
       <div className="absolute inset-0 opacity-20">
         <div className="text-[300px] sm:text-12xl md:text-16xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-purple-300 to-pink-200 absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-6 sm:-translate-y-12 select-none pointer-events-none">
           Nexa
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
 
           <div className="text-center sm:text-left">
-            <h4 className="font-semibold mb-3 sm:mb-4">For Users</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-white">For Users</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-gray-400 text-sm sm:text-base">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
@@ -67,7 +67,7 @@ export default function Footer() {
           </div>
 
           <div className="text-center sm:text-left">
-            <h4 className="font-semibold mb-3 sm:mb-4">For Businesses</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-white">For Businesses</h4>
             <ul className="space-y-1.5 sm:space-y-2 text-gray-400 text-sm sm:text-base">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
