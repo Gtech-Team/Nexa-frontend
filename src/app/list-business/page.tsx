@@ -16,7 +16,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import Footer from "@/components/footer"
-import PageHeader from "@/components/business/page-header"
+// import PageHeader from "@/components/business/page-header"
 
 const testimonials = [
   {
@@ -126,12 +126,7 @@ export default function ListBusinessPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-        {/* Header */}
-            <PageHeader
-              title="Find a Business"
-              favoritesCount={0}
-                variant="black"
-            />
+      
       
 
       {/* Hero Section */}

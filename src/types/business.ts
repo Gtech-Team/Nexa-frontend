@@ -17,6 +17,43 @@ export interface Business {
   isPromoted: boolean
 }
 
+export interface Service {
+  id: string
+  name: string
+  description: string
+  price: string
+  duration: string
+  rating: number
+  category: string
+}
+
+export interface Product {
+  id: string
+  name: string
+  description: string
+  price: string
+  rating: number
+  category: string
+  variants?: ProductVariant[]
+  inStock?: boolean
+}
+
+export interface ProductVariant {
+  id: string
+  name: string
+  available: boolean
+  priceAdjustment?: number
+}
+
+export interface Review {
+  id: string
+  user: string
+  rating: number
+  comment: string
+  date: string
+  verified: boolean
+}
+
 export interface Filters {
   city: string
   businessType: string

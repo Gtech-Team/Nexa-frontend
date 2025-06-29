@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,12 +14,31 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { BusinessCardProps } from "@/types/business";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import BookingModal from "./booking-modal";
+import OrderModal from "./order-modal";
+import NegotiationModal from "./negotiation-modal";
 
 export default function BusinessCard({
   business,
   onToggleFavorite,
   isFavorite,
 }: BusinessCardProps) {
+  const router = useRouter();
+  const [activeModal, setActiveModal] = useState<'booking' | 'order' | 'negotiation' | null>(null);
+
+  const handleViewDetails = () => {
+    router.push(`/business/${business.id}`);
+  };
+
+  const handleActionClick = (action: 'booking' | 'order' | 'negotiation') => {
+    setActiveModal(action);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -38,21 +59,30 @@ export default function BusinessCard({
     switch (business.type) {
       case "order":
         return (
-          <Button className={baseClasses}>
+          <Button 
+            className={baseClasses}
+            onClick={() => handleActionClick('order')}
+          >
             <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             Order
           </Button>
         );
       case "booking":
         return (
-          <Button className={baseClasses}>
+          <Button 
+            className={baseClasses}
+            onClick={() => handleActionClick('booking')}
+          >
             <Calendar className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             Book
           </Button>
         );
       case "negotiation":
         return (
-          <Button className={baseClasses}>
+          <Button 
+            className={baseClasses}
+            onClick={() => handleActionClick('negotiation')}
+          >
             <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             Negotiate
           </Button>
@@ -198,11 +228,37 @@ export default function BusinessCard({
           <Button
             variant="outline"
             className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+            onClick={handleViewDetails}
           >
             View Details
           </Button>
         </div>
       </CardContent>
+
+      {/* Modals */}
+      {activeModal === 'booking' && (
+        <BookingModal
+          isOpen={true}
+          onClose={closeModal}
+          business={business}
+        />
+      )}
+
+      {activeModal === 'order' && (
+        <OrderModal
+          isOpen={true}
+          onClose={closeModal}
+          business={business}
+        />
+      )}
+
+      {activeModal === 'negotiation' && (
+        <NegotiationModal
+          isOpen={true}
+          onClose={closeModal}
+          business={business}
+        />
+      )}
     </Card>
   );
 }

@@ -4,12 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Sparkles } from "lucide-react"
 import { AIRecommendationsProps } from "@/types/business"
+import { useRouter } from "next/navigation"
 
 export default function AIRecommendations({ businesses, isLoading = false }: AIRecommendationsProps) {
   const recommendedBusinesses = businesses
     .filter((b) => b.matchScore > 85)
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 5)
+    const router = useRouter()
 
   if (isLoading) {
     return (
@@ -65,9 +67,14 @@ export default function AIRecommendations({ businesses, isLoading = false }: AIR
               >
                 Match Score: {business.matchScore}%
               </Badge>
-              <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white text-sm">
+                <Button
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white text-sm"
+                onClick={() => {
+                  router.push(`/business/${business.id}`);
+                }}
+                >
                 View Business
-              </Button>
+                </Button>
             </CardContent>
           </Card>
         ))}

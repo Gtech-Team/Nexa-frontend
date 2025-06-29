@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useFavorites } from "@/hooks/use-favorites"
 
 // Import modular components
 import AIRecommendations from "@/components/business/ai-recommendations"
@@ -25,11 +26,14 @@ export default function FindBusinessPage() {
     sortBy: "AI Recommended",
     searchQuery: "",
   })
-  const [favorites, setFavorites] = useState<string[]>([])
+  const { favorites, toggleFavorite } = useFavorites()
   const [isLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<"featured" | "all" | "nearby">("featured")
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
+
+  // Convert favorites to simple string array for compatibility
+  const favoriteIds = favorites.map(fav => fav.id)
 
   // Filter businesses based on current filters and active tab
   const filteredBusinesses = mockBusinesses.filter((business) => {
@@ -81,7 +85,19 @@ export default function FindBusinessPage() {
   const currentBusinesses = sortedBusinesses.slice(startIndex, endIndex)
 
   const handleToggleFavorite = (businessId: string) => {
-    setFavorites((prev) => (prev.includes(businessId) ? prev.filter((id) => id !== businessId) : [...prev, businessId]))
+    const business = mockBusinesses.find(b => b.id === businessId)
+    if (business) {
+      toggleFavorite({
+        id: business.id,
+        name: business.name,
+        category: business.category,
+        city: business.city,
+        rating: business.rating,
+        price: business.price,
+        logo: business.logo,
+        verified: business.verified
+      })
+    }
   }
 
   const handlePageChange = (page: number) => {
@@ -139,7 +155,7 @@ export default function FindBusinessPage() {
         ) : (
           <BusinessGrid 
             businesses={currentBusinesses} 
-            favorites={favorites} 
+            favorites={favoriteIds} 
             onToggleFavorite={handleToggleFavorite}
           />
         )}

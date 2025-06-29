@@ -4,7 +4,7 @@ import { useState } from "react"
 import Navigation from "@/components/navigation"
 import BackgroundPattern from "@/components/background-pattern"
 import UsersHeroSection from "@/components/users-hero-section"
-import BusinessHeroSection from "@/components/business-hero-section"
+// import BusinessHeroSection from "@/components/business-hero-section"
 import BusinessCategoriesSection from "@/components/business-categories-section"
 import CompanyLogosSection from "@/components/company-logos-section"
 import ProcessSteps from "@/components/process-steps"
@@ -12,6 +12,10 @@ import UsersInterfaceCard from "@/components/users-interface-card"
 import GetStartedSection from "@/components/get-started-section"
 import Footer from "@/components/footer"
 import ScrollToTop from "@/components/scroll-to-top"
+import { AuthProvider } from "@/components/auth/auth-provider"
+import UserNav from "@/components/navigation/user-nav"
+import MobileAuthFAB from "@/components/navigation/mobile-auth-fab"
+import ListBusinessPage from "@/app/list-business/page"
 
 export default function HomePage() {
   const [activeView, setActiveView] = useState<"users" | "business">("users")
@@ -39,76 +43,53 @@ export default function HomePage() {
     },
   ]
 
-  const businessSteps = [
-    {
-      number: "1",
-      title: "Launch your business",
-      description: "List your services or sync existing links — Nexa builds your smart digital storefront fast.",
-    },
-    {
-      number: "2",
-      title: "Get discovered fast",
-      description: "Reach nearby buyers searching for your service through Nexa's AI-powered engine.",
-    },
-    {
-      number: "3",
-      title: "Own your brand voice",
-      description: "Edit your page, set your banner, and share offers that shape how customers see you.",
-    },
-    {
-      number: "4",
-      title: "Respond and grow",
-      description: "Track inquiries, pricing trends, and customer demand through Nexa-AI insights daily.",
-    },
-  ]
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Navigation */}
-      <Navigation activeView={activeView} setActiveView={setActiveView} />
+    <AuthProvider>
+      <div className="min-h-screen bg-black text-white overflow-hidden">
+        {/* Navigation */}
+        <UserNav />
+        <Navigation activeView={activeView} setActiveView={setActiveView} />
 
-      {/* Geometric Background Pattern */}
-      <BackgroundPattern />
+        {/* Geometric Background Pattern */}
+        <BackgroundPattern />
 
-      {activeView === "users" ? (
-        <>
-          {/* Users Hero Section */}
-          <UsersHeroSection />
+        {activeView === "users" ? (
+          <>
+            {/* Users Hero Section */}
+            <UsersHeroSection />
 
-          {/* Business Categories - Users Only */}
-          <BusinessCategoriesSection />
+            {/* Business Categories - Users Only */}
+            <BusinessCategoriesSection />
 
-          {/* Company Logos Scroll */}
-          <CompanyLogosSection />          {/* Process Steps */}
-          <section className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 relative">
-            <div className="max-w-7xl mx-auto">
-              <ProcessSteps steps={usersSteps} />
+            {/* Company Logos Scroll */}
+            <CompanyLogosSection />          {/* Process Steps */}
+            <section className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 relative">
+              <div className="max-w-7xl mx-auto">
+                <ProcessSteps steps={usersSteps} />
 
-              {/* Large Interface Card */}
-              <UsersInterfaceCard />
-            </div>
-          </section>
-        </>
-      ) : (
-        <>
-          {/* Business Hero Section */}
-          <BusinessHeroSection />          {/* Business Process Steps */}
-          <section className="pt-6 sm:pt-8 md:pt-10 pb-8 sm:pb-8 md:pb-10 px-4 sm:px-6 relative">
-            <div className="max-w-7xl mx-auto">
-              <ProcessSteps steps={businessSteps} />
-            </div>
-          </section>
-        </>
-      )}
+                {/* Large Interface Card */}
+                <UsersInterfaceCard />
+              </div>
+            </section>
+            
+        {/* Get Started Section */}
+        <GetStartedSection activeView={activeView} />
 
-      {/* Get Started Section */}
-      <GetStartedSection activeView={activeView} />
+        {/* Footer */}
+        <Footer />
 
-      {/* Footer */}
-      <Footer />
-
-      {/* Scroll to top */}
-      <ScrollToTop />
-    </div>
+        {/* Scroll to top */}
+        <ScrollToTop />
+        {/* Mobile Auth FAB */}
+        <MobileAuthFAB />
+          </>
+        ) : (
+            <>
+              <ListBusinessPage />
+            </>
+        )}
+     </div>
+   </AuthProvider>  
   )
 }

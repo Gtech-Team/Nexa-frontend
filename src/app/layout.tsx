@@ -1,6 +1,7 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -55,7 +56,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<div>Loading Nexa...</div>}>{children}</Suspense>
+        <ToastProvider>
+          <Suspense fallback={<div>Loading Nexa...</div>}>{children}</Suspense>
+        </ToastProvider>
       </body>
     </html>
   );
