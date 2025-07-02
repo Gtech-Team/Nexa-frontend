@@ -74,7 +74,7 @@ export default function HomePage() {
             </section>
             
         {/* Get Started Section */}
-        <GetStartedSection activeView={activeView} />
+        <GetStartedSection />
 
         {/* Footer */}
         <Footer />

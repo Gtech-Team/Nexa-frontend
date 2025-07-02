@@ -1,123 +1,264 @@
 "use client"
 
-import type React from "react"
-
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/components/auth/auth-provider"
-import { Heart, MessageSquare, Calendar, ShoppingCart, Star, DollarSign } from "lucide-react"
+import { useAuth, useModal, useApp } from '@/store'
+import { 
+  Heart, 
+  MessageCircle, 
+  Calendar, 
+  ShoppingCart, 
+  Star,
+  Phone,
+  Share2,
+  HandCoins
+} from "lucide-react"
+import { cn } from '@/lib/utils'
 
-interface GatedActionButtonProps {
-  action: "save" | "negotiate" | "book" | "order" | "review" | "message"
-  businessName: string
+type ActionType = 'save' | 'message' | 'book' | 'order' | 'review' | 'call' | 'share' | 'negotiate'
+
+interface GatedActionsProps {
   businessId: string
-  variant?: "default" | "outline" | "ghost"
-  size?: "sm" | "default" | "lg"
+  businessName: string
+  businessPhone?: string
+  actions: ActionType[]
+  variant?: 'default' | 'compact' | 'floating'
   className?: string
-  children?: React.ReactNode
 }
 
-export default function GatedActionButton({
-  action,
-  businessName,
-  businessId,
-  variant = "default",
-  size = "default",
-  className = "",
-  children,
-}: GatedActionButtonProps) {
-  const { isAuthenticated, showAuthModal } = useAuth()
+interface ActionConfig {
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  requiresAuth: boolean
+  action: (businessId: string, businessName: string) => void
+  variant?: 'default' | 'outline' | 'secondary'
+  color?: string
+}
 
-  const actionConfig = {
+export default function GatedActions({ 
+  businessId, 
+  businessName, 
+  businessPhone,
+  actions, 
+  variant = 'default',
+  className 
+}: GatedActionsProps) {
+  const { isAuthenticated } = useAuth()
+  const { openBookingModal, openNegotiationModal, openAuthModal } = useModal()
+  const { addToFavorites, removeFromFavorites, favoriteBusinesses } = useApp()
+  const isFavorite = favoriteBusinesses.includes(businessId)
+
+  const handleSave = () => {
+    if (isFavorite) {
+      removeFromFavorites(businessId)
+    } else {
+      addToFavorites(businessId)
+    }
+  }
+
+  const handleMessage = () => {
+    // Open messaging interface
+    console.log('Opening message interface for:', businessName)
+  }
+
+  const handleBook = () => {
+    openBookingModal(businessId)
+  }
+
+  const handleOrder = () => {
+    // Open order interface or add to cart
+    console.log('Opening order interface for:', businessName)
+  }
+
+  const handleReview = () => {
+    // Open review interface
+    console.log('Opening review interface for:', businessName)
+  }
+
+  const handleCall = () => {
+    if (businessPhone) {
+      window.open(`tel:${businessPhone}`, '_self')
+    }
+  }
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: businessName,
+        text: `Check out ${businessName} on Nexa`,
+        url: window.location.href
+      })
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href)
+    }
+  }
+
+  const handleNegotiate = () => {
+    openNegotiationModal(businessId)
+  }
+
+  const actionConfigs: Record<ActionType, ActionConfig> = {
     save: {
       icon: Heart,
-      label: "Save Business",
-      color: "text-red-500",
-      bgColor: "bg-red-50 hover:bg-red-100",
+      label: isFavorite ? 'Saved' : 'Save',
+      requiresAuth: true,
+      action: handleSave,
+      variant: isFavorite ? 'default' : 'outline',
+      color: isFavorite ? 'text-red-500' : 'text-gray-500'
     },
-    negotiate: {
-      icon: DollarSign,
-      label: "Negotiate Price",
-      color: "text-green-500",
-      bgColor: "bg-green-50 hover:bg-green-100",
+    message: {
+      icon: MessageCircle,
+      label: 'Message',
+      requiresAuth: true,
+      action: handleMessage,
+      variant: 'outline'
     },
     book: {
       icon: Calendar,
-      label: "Book Appointment",
-      color: "text-blue-500",
-      bgColor: "bg-blue-50 hover:bg-blue-100",
+      label: 'Book',
+      requiresAuth: true,
+      action: handleBook,
+      variant: 'default'
     },
     order: {
       icon: ShoppingCart,
-      label: "Order Now",
-      color: "text-purple-500",
-      bgColor: "bg-purple-50 hover:bg-purple-100",
+      label: 'Order',
+      requiresAuth: true,
+      action: handleOrder,
+      variant: 'default'
     },
     review: {
       icon: Star,
-      label: "Leave Review",
-      color: "text-yellow-500",
-      bgColor: "bg-yellow-50 hover:bg-yellow-100",
+      label: 'Review',
+      requiresAuth: true,
+      action: handleReview,
+      variant: 'outline'
     },
-    message: {
-      icon: MessageSquare,
-      label: "Message Vendor",
-      color: "text-indigo-500",
-      bgColor: "bg-indigo-50 hover:bg-indigo-100",
+    call: {
+      icon: Phone,
+      label: 'Call',
+      requiresAuth: false,
+      action: handleCall,
+      variant: 'outline'
     },
+    share: {
+      icon: Share2,
+      label: 'Share',
+      requiresAuth: false,
+      action: handleShare,
+      variant: 'outline'
+    },
+    negotiate: {
+      icon: HandCoins,
+      label: 'Negotiate',
+      requiresAuth: true,
+      action: handleNegotiate,
+      variant: 'secondary'
+    }
   }
 
-  const config = actionConfig[action]
-  const Icon = config.icon
-
-  const handleClick = () => {
-    if (!isAuthenticated) {
-      showAuthModal(action, businessName)
+  const handleActionClick = (actionType: ActionType) => {
+    const config = actionConfigs[actionType]
+    
+    if (config.requiresAuth && !isAuthenticated) {
+      openAuthModal('login', undefined, actionType)
       return
     }
+    
+    config.action(businessId, businessName)
+  }
 
-    // Handle authenticated action
-    console.log(`Performing ${action} for business ${businessId}`)
-
-    // Here you would implement the actual action logic
-    switch (action) {
-      case "save":
-        // Add to favorites
-        break
-      case "negotiate":
-        // Open negotiation modal
-        break
-      case "book":
-        // Open booking modal
-        break
-      case "order":
-        // Add to cart or open order modal
-        break
-      case "review":
-        // Open review modal
-        break
-      case "message":
-        // Open chat interface
-        break
+  const getButtonSize = () => {
+    switch (variant) {
+      case 'compact':
+        return 'sm'
+      case 'floating':
+        return 'lg'
+      default:
+        return 'default'
     }
   }
 
-  if (children) {
-    return (
-      <Button onClick={handleClick} variant={variant} size={size} className={className}>
-        {children}
-      </Button>
-    )
+  const getContainerClassName = () => {
+    switch (variant) {
+      case 'compact':
+        return 'flex items-center space-x-2'
+      case 'floating':
+        return 'fixed bottom-6 right-6 flex flex-col space-y-2 z-50'
+      default:
+        return 'flex items-center space-x-3'
+    }
   }
 
   return (
-    <Button
-      onClick={handleClick}
-      variant={variant}
-      size={size}
-      className={`${className} ${variant === "outline" ? config.bgColor : ""}`}
-    >
-      <Icon className={`w-4 h-4 mr-2 ${variant === "outline" ? config.color : ""}`} />
-      {config.label}
-    </Button>
+    <div className={cn(getContainerClassName(), className)}>
+      {actions.map((actionType) => {
+        const config = actionConfigs[actionType]
+        const Icon = config.icon
+        
+        return (
+          <Button
+            key={actionType}
+            variant={config.variant}
+            size={getButtonSize()}
+            onClick={() => handleActionClick(actionType)}
+            className={cn(
+              'transition-all duration-200',
+              config.color && config.color,
+              variant === 'floating' && 'shadow-lg hover:shadow-xl',
+              variant === 'compact' && 'h-8 px-3 text-sm',
+              actionType === 'save' && isFavorite && 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100'
+            )}
+          >
+            <Icon className={cn(
+              variant === 'compact' ? 'w-3 h-3' : 'w-4 h-4',
+              variant !== 'compact' && 'mr-2'
+            )} />
+            {variant !== 'compact' && config.label}
+          </Button>
+        )
+      })}
+    </div>
   )
 }
+
+// Preset action groups for common use cases
+export const BusinessCardActions = ({ businessId, businessName, businessPhone }: { 
+  businessId: string
+  businessName: string
+  businessPhone?: string 
+}) => (
+  <GatedActions
+    businessId={businessId}
+    businessName={businessName}
+    businessPhone={businessPhone}
+    actions={['save', 'message', 'call', 'share']}
+    variant="compact"
+  />
+)
+
+export const BusinessProfileActions = ({ businessId, businessName, businessPhone }: { 
+  businessId: string
+  businessName: string
+  businessPhone?: string 
+}) => (
+  <GatedActions
+    businessId={businessId}
+    businessName={businessName}
+    businessPhone={businessPhone}
+    actions={['save', 'book', 'order', 'message', 'negotiate']}
+  />
+)
+
+export const FloatingActions = ({ businessId, businessName }: { 
+  businessId: string
+  businessName: string 
+}) => (
+  <GatedActions
+    businessId={businessId}
+    businessName={businessName}
+    actions={['save', 'book', 'message']}
+    variant="floating"
+    className="md:hidden"
+  />
+)

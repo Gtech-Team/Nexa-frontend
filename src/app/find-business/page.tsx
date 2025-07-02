@@ -11,8 +11,12 @@ import BusinessGrid from "@/components/business/business-grid"
 import AIHelperButton from "@/components/business/ai-helper-button"
 import PromotionBanner from "@/components/business/promotion-banner"
 import Pagination from "@/components/business/pagination"
-import PageHeader from "@/components/business/page-header"
 import Footer from "@/components/footer"
+import MobileAuthFAB from "@/components/navigation/mobile-auth-fab"
+import NewAuthModal from "@/components/auth/new-auth-modal"
+import UserNav from "@/components/navigation/user-nav"
+import { useAuth } from "@/components/auth/auth-provider"
+import Image from "next/image"
 
 
 // Import types and data
@@ -20,6 +24,7 @@ import type { Filters } from "@/types/business"
 import { mockBusinesses, cities, businessTypes, sortOptions } from "@/data/mockData"
 
 export default function FindBusinessPage() {
+  const { authModal, hideAuthModal } = useAuth()
   const [filters, setFilters] = useState<Filters>({
     city: "All Cities",
     businessType: "All Types",
@@ -118,14 +123,51 @@ export default function FindBusinessPage() {
   return (
     
     <div className="min-h-screen bg-gray-50">
-    {/* <Navigation activeView={activeView} setActiveView={setActiveView} /> */}
+      {/* Navigation Header */}
+      
+      <header className="border-b border-gray-200 sticky top-0 z-40 bg-white/80 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={() => window.history.back()}
+                  className="mr-3 rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#05BBC8] transition cursor-pointer"
+                  aria-label="Go back"
+                >
+                  {/* Lucide ArrowLeft icon */}
+                  <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-gray-700"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                    <Image
+                    src="/nexa-favicon.png"
+                    alt="Nexa Logo"
+                    width={24}
+                    height={24}
+                    className="object-contain"
+                    priority
+                    />
+                <span className="text-xl font-semibold text-gray-900">Nexa</span>
+              </div>
+              <div className="hidden md:block text-gray-500">|</div>
+              <h1 className="hidden md:block text-lg font-medium text-gray-900">Find a Business</h1>
+            </div>
+            
+            {/* User Navigation */}
+            <UserNav />
+          </div>
+        </div>
+      </header>
         
-      {/* Header */}
-      <PageHeader
-        title="Find a Business"
-        favoritesCount={favorites.length}
-      />
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* AI Recommendations */}
@@ -176,9 +218,19 @@ export default function FindBusinessPage() {
       {/* AI Helper Button */}
       <AIHelperButton />
 
+      {/* Mobile Auth FAB */}
+      <MobileAuthFAB />
 
       {/* Footer */}
       <Footer />
+
+      {/* Auth Modal */}
+      <NewAuthModal
+        isOpen={authModal.isOpen}
+        onClose={hideAuthModal}
+        triggerAction={authModal.triggerAction}
+        businessName={authModal.businessName}
+      />
     </div>
   )
 }

@@ -16,6 +16,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import Footer from "@/components/footer"
+import ScrollToTop from "@/components/scroll-to-top"
 // import PageHeader from "@/components/business/page-header"
 
 const testimonials = [
@@ -344,9 +345,12 @@ export default function ListBusinessPage() {
           </div>
         </div>
       </section>
+       {/* Scroll to top */}
+            <ScrollToTop />
 
       {/* Footer */}
            <Footer />
     </div>
+   
   )
 }
