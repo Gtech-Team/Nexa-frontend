@@ -12,7 +12,6 @@ import UsersInterfaceCard from "@/components/users-interface-card"
 import GetStartedSection from "@/components/get-started-section"
 import Footer from "@/components/footer"
 import ScrollToTop from "@/components/scroll-to-top"
-import { AuthProvider } from "@/components/auth/auth-provider"
 import UserNav from "@/components/navigation/user-nav"
 import MobileAuthFAB from "@/components/navigation/mobile-auth-fab"
 import ListBusinessPage from "@/app/list-business/page"
@@ -45,51 +44,52 @@ export default function HomePage() {
 
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-black text-white overflow-hidden">
-        {/* Navigation */}
-        <UserNav />
-        <Navigation activeView={activeView} setActiveView={setActiveView} />
+    <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* Navigation */}
+      <UserNav />
+      <Navigation activeView={activeView} setActiveView={setActiveView} />
 
-        {/* Geometric Background Pattern */}
-        <BackgroundPattern />
+      {/* Geometric Background Pattern */}
+      <BackgroundPattern />
 
-        {activeView === "users" ? (
-          <>
-            {/* Users Hero Section */}
-            <UsersHeroSection />
+      {activeView === "users" ? (
+        <>
+          {/* Users Hero Section */}
+          <UsersHeroSection />
 
-            {/* Business Categories - Users Only */}
-            <BusinessCategoriesSection />
+          {/* Business Categories - Users Only */}
+          <BusinessCategoriesSection />
 
-            {/* Company Logos Scroll */}
-            <CompanyLogosSection />          {/* Process Steps */}
-            <section className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 relative">
-              <div className="max-w-7xl mx-auto">
-                <ProcessSteps steps={usersSteps} />
+          {/* Company Logos Scroll */}
+          <CompanyLogosSection />
+          
+          {/* Process Steps */}
+          <section className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 relative">
+            <div className="max-w-7xl mx-auto">
+              <ProcessSteps steps={usersSteps} />
 
-                {/* Large Interface Card */}
-                <UsersInterfaceCard />
-              </div>
-            </section>
-            
-        {/* Get Started Section */}
-        <GetStartedSection />
+              {/* Large Interface Card */}
+              <UsersInterfaceCard />
+            </div>
+          </section>
+          
+          {/* Get Started Section */}
+          <GetStartedSection />
 
-        {/* Footer */}
-        <Footer />
+          {/* Footer */}
+          <Footer />
+        </>
+      ) : (
+        <>
+          <ListBusinessPage />
+        </>
+      )}
 
-        {/* Scroll to top */}
-        <ScrollToTop />
-        {/* Mobile Auth FAB */}
-        <MobileAuthFAB />
-          </>
-        ) : (
-            <>
-              <ListBusinessPage />
-            </>
-        )}
-     </div>
-   </AuthProvider>  
+      {/* Mobile Auth FAB for non-authenticated users */}
+      <MobileAuthFAB />
+
+      {/* Scroll to Top */}
+      <ScrollToTop />
+    </div>
   )
 }

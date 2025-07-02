@@ -278,14 +278,17 @@ export default function UserDashboard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
+                  className={`py-3 px-4 border-b-2 font-medium text-sm flex items-center space-x-2 transition-all duration-200 cursor-pointer rounded-t-lg ${
                     activeTab === tab.id
-                      ? "border-[#05BBC8] text-[#05BBC8]"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                      ? "border-[#05BBC8] text-[#05BBC8] bg-[#05BBC8]/10 shadow-sm"
+                      : "border-transparent text-gray-500 hover:text-[#05BBC8] hover:border-[#05BBC8]/50 hover:bg-gray-50"
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
+                  <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-[#05BBC8]" : ""}`} />
                   <span>{tab.label}</span>
+                  {activeTab === tab.id && (
+                    <div className="w-1 h-1 bg-[#05BBC8] rounded-full"></div>
+                  )}
                 </button>
               ))}
             </nav>

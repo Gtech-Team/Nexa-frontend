@@ -10,7 +10,7 @@ export interface GoogleOAuthConfig {
 
 export const googleOAuthConfig: GoogleOAuthConfig = {
   clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
-  redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/google/callback`,
+  redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/google/callback',
   scope: 'openid email profile',
 };
 
