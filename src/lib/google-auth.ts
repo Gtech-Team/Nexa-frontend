@@ -97,6 +97,31 @@ export class GoogleOAuth {
     });
   }
 
+  /**
+   * Initiate Google OAuth with Authorization Code Flow
+   */
+  initiateGoogleOAuth(): void {
+    const params = new URLSearchParams({
+      client_id: googleOAuthConfig.clientId,
+      redirect_uri: googleOAuthConfig.redirectUri,
+      response_type: 'code',
+      scope: googleOAuthConfig.scope,
+      access_type: 'offline',
+      prompt: 'consent',
+      state: this.generateRandomState(),
+    });
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  }
+
+  /**
+   * Generate random state for CSRF protection
+   */
+  private generateRandomState(): string {
+    return Math.random().toString(36).substring(2, 15) + 
+           Math.random().toString(36).substring(2, 15);
+  }
+
   async initializeGoogleAuth(): Promise<void> {
     await this.loadGoogleScript();
     

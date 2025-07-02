@@ -6,9 +6,6 @@ import { AuthProvider } from "@/components/auth/auth-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  icons: {
-icon: "/nexa-favicon.png",
-},
   title: "Nexa - Nigeria's #1 AI Local Business Platform",
   description:
     "AI-powered local commerce platform connecting users with businesses across Nigeria. Discover, book, and engage with local services effortlessly.",
@@ -21,6 +18,17 @@ icon: "/nexa-favicon.png",
     "booking platform",
   ],
   authors: [{ name: "Nexa Team" }],
+  icons: {
+    icon: [
+      { url: "/nexa-favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/nexa-favicon.png", sizes: "16x16", type: "image/png" }
+    ],
+    shortcut: ["/nexa-favicon.png"],
+    apple: [
+      { url: "/nexa-favicon.png", sizes: "180x180", type: "image/png" }
+    ]
+  },
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "Nexa - Nigeria's #1 AI Local Commerce Platform",
     description:
@@ -56,9 +64,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/nexa-favicon.png" />
-      </head>
       <body>
         <AuthProvider>
           <ToastProvider>

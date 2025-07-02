@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { GoogleOAuth } from "@/lib/google-auth"
 import {
   X,
   Phone,
@@ -221,17 +222,24 @@ export default function AuthModal({ isOpen, onClose, onSuccess, triggerAction, b
     setCountdown(30)
   }
 
-  const handleGoogleLogin = () => {
-    // Simulate Google login
-    setTimeout(() => {
-      onSuccess({
-        id: "1",
-        name: "John Doe",
-        phone: "+234 803 123 4567",
-        avatar: "/placeholder.svg?height=40&width=40",
-      })
-      onClose()
-    }, 1000)
+  const handleGoogleLogin = async () => {
+    try {
+      const googleAuth = GoogleOAuth.getInstance()
+      googleAuth.initiateGoogleOAuth()
+    } catch (error) {
+      console.error('Google OAuth error:', error)
+      // Fallback to manual redirect if needed
+      const params = new URLSearchParams({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+        redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || '',
+        response_type: 'code',
+        scope: 'openid email profile',
+        access_type: 'offline',
+        prompt: 'consent',
+      });
+
+      window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+    }
   }
 
   const renderPhoneStep = () => (
