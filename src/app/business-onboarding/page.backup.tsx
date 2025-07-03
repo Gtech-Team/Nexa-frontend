@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -16,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   UtensilsCrossed,
   Building2,
@@ -34,6 +33,7 @@ import {
   Share2,
   BarChart3,
   ArrowLeft,
+  ArrowRight,
   Check,
   Camera,
   Settings,
@@ -43,6 +43,7 @@ import {
   Copy,
   Edit,
   Trash2,
+  Rocket,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -209,7 +210,6 @@ const createEmptyBranch = (businessName: string): BusinessBranch => ({
 
 export default function BusinessOnboardingPage() {
   // Track if this component has been mounted
-   
   const [hasMounted, setHasMounted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [onboardingState, setOnboardingState] = useState<OnboardingState>({
@@ -417,33 +417,33 @@ export default function BusinessOnboardingPage() {
   );
 
   const renderBusinessSelector = () => (
-    <div className="mb-4 sm:mb-6">
-      <div className="flex flex-col xs:flex-row xs:items-center justify-between mb-3 sm:mb-4 gap-2 xs:gap-0">
-        <h3 className="text-base sm:text-lg font-semibold text-white">Your Businesses</h3>
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">Your Businesses</h3>
         <Button
           onClick={addNewBusiness}
           variant="outline"
           size="sm"
-          className="border-[#05BBC8] text-[#05BBC8] hover:bg-[#05BBC8]/10 w-full xs:w-auto text-xs sm:text-sm"
+          className="border-[#05BBC8] text-[#05BBC8] hover:bg-[#05BBC8]/10"
         >
-          <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+          <Plus className="w-4 h-4 mr-2" />
           Add Business
         </Button>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 xs:gap-3">
+      <div className="flex space-x-3 overflow-x-auto pb-2">
         {onboardingState.businesses.map((business, index) => (
           <Card
             key={business.id}
-            className={`cursor-pointer transition-all ${
+            className={`min-w-[200px] cursor-pointer transition-all ${
               index === onboardingState.currentBusinessIndex
                 ? "border-[#05BBC8] bg-[#05BBC8]/10"
                 : "border-gray-700 bg-gray-900 hover:border-gray-600"
             }`}
             onClick={() => switchToBusiness(index)}
           >
-            <CardContent className="p-2 xs:p-3 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <h4 className="font-semibold text-xs xs:text-sm sm:text-base text-white truncate">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-white truncate">
                   {business.name || `Business ${index + 1}`}
                 </h4>
                 {onboardingState.businesses.length > 1 && (
@@ -454,14 +454,14 @@ export default function BusinessOnboardingPage() {
                       e.stopPropagation();
                       deleteBusiness(index);
                     }}
-                    className="text-red-400 hover:text-red-300 p-0 xs:p-1"
+                    className="text-red-400 hover:text-red-300 p-1"
                   >
                     <Trash2 className="w-3 h-3" />
                   </Button>
                 )}
               </div>
-              <p className="text-xs sm:text-sm text-gray-400 truncate">{business.category}</p>
-              <Badge className="mt-1 sm:mt-2 text-[10px] xs:text-xs">
+              <p className="text-sm text-gray-400">{business.category}</p>
+              <Badge className="mt-2 text-xs">
                 {business.branches.length} branch
                 {business.branches.length !== 1 ? "es" : ""}
               </Badge>
@@ -473,35 +473,35 @@ export default function BusinessOnboardingPage() {
   );
 
   const renderBranchSelector = () => (
-    <div className="mb-4 sm:mb-6">
-      <div className="flex flex-col xs:flex-row xs:items-center justify-between mb-3 sm:mb-4 gap-2 xs:gap-0">
-        <h3 className="text-base sm:text-lg font-semibold text-white truncate">
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-white">
           {currentBusiness.name || "Current Business"} - Branches
         </h3>
         <Button
           onClick={addNewBranch}
           variant="outline"
           size="sm"
-          className="border-[#05BBC8] text-[#05BBC8] hover:bg-[#05BBC8]/10 w-full xs:w-auto text-xs sm:text-sm"
+          className="border-[#05BBC8] text-[#05BBC8] hover:bg-[#05BBC8]/10"
         >
-          <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+          <Plus className="w-4 h-4 mr-2" />
           Add Branch
         </Button>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 xs:gap-3">
+      <div className="flex space-x-3 overflow-x-auto pb-2">
         {currentBusiness.branches.map((branch, index) => (
           <Card
             key={branch.id}
-            className={`cursor-pointer transition-all ${
+            className={`min-w-[200px] cursor-pointer transition-all ${
               index === onboardingState.currentBranchIndex
                 ? "border-[#05BBC8] bg-[#05BBC8]/10"
                 : "border-gray-700 bg-gray-900 hover:border-gray-600"
             }`}
             onClick={() => switchToBranch(index)}
           >
-            <CardContent className="p-2 xs:p-3 sm:p-4">
-              <div className="flex items-center justify-between mb-1">
-                <h4 className="font-semibold text-xs xs:text-sm sm:text-base text-white truncate">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-white truncate">
                   {branch.name}
                 </h4>
                 {!branch.isMainBranch && (
@@ -512,22 +512,22 @@ export default function BusinessOnboardingPage() {
                       e.stopPropagation();
                       deleteBranch(index);
                     }}
-                    className="text-red-400 hover:text-red-300 p-0 xs:p-1"
+                    className="text-red-400 hover:text-red-300 p-1"
                   >
                     <Trash2 className="w-3 h-3" />
                   </Button>
                 )}
               </div>
-              <p className="text-xs sm:text-sm text-gray-400 truncate">
+              <p className="text-sm text-gray-400">
                 {branch.city || "City not set"}
               </p>
-              <div className="flex flex-wrap items-center gap-1 xs:gap-2 mt-1 sm:mt-2">
+              <div className="flex items-center space-x-2 mt-2">
                 {branch.isMainBranch && (
-                  <Badge className="text-[10px] xs:text-xs bg-[#05BBC8] text-black">
+                  <Badge className="text-xs bg-[#05BBC8] text-black">
                     Main
                   </Badge>
                 )}
-                <Badge variant="outline" className="text-[10px] xs:text-xs">
+                <Badge variant="outline" className="text-xs">
                   {branch.products.length} products
                 </Badge>
               </div>
@@ -571,9 +571,9 @@ export default function BusinessOnboardingPage() {
         {onboardingState.businesses.length > 1 && renderBusinessSelector()}
         {currentBusiness.branches.length > 1 && renderBranchSelector()}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
-          <div className="space-y-4 sm:space-y-6">
-            <div className="space-y-3 sm:space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <div className="space-y-4">
               {!onboardingState.isAddingNewBranch && (
                 <>
                   <AnimatedInput
@@ -854,23 +854,25 @@ export default function BusinessOnboardingPage() {
         </div>
       </div>
     </div>
-    </StepCard>
-
   );
 
   const renderStep3 = () => (
-    <StepCard
-      title={`Add products/services for ${currentBranch.name}`}
-      subtitle="Showcase what you offer at this location"
-      icon={<PartyPopper className="w-6 h-6" />}
-      delay={0.1}
-    >
-      <div className="space-y-8">
-        {onboardingState.businesses.length > 1 && renderBusinessSelector()}
-        {currentBusiness.branches.length > 1 && renderBranchSelector()}
+    <div className="space-y-8">
+      {onboardingState.businesses.length > 1 && renderBusinessSelector()}
+      {currentBusiness.branches.length > 1 && renderBranchSelector()}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
-          <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-6">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Add products/services for {currentBranch.name}
+            </h2>
+            <p className="text-gray-400">
+              Showcase what you offer at this location
+            </p>
+          </div>
+
+          <div className="space-y-6">
             {currentBranch.products.map((product, index) => (
               <Card key={product.id} className="bg-gray-900 border-gray-700">
                 <CardContent className="p-6">
@@ -1012,7 +1014,7 @@ export default function BusinessOnboardingPage() {
           </Card>
         </div>
       </div>
-    </StepCard>
+    </div>
   );
 
   const renderStep4 = () => (
@@ -1163,213 +1165,209 @@ export default function BusinessOnboardingPage() {
           Configure how customers can interact with this branch
         </p>
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
           <Card className="bg-gray-900 border-gray-700">
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">
-            Business Features
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-          <div>
-            <h4 className="font-medium text-white">Enable Bookings</h4>
-            <p className="text-sm text-gray-400">
-              Allow customers to book appointments
-            </p>
-          </div>
-          <Switch
-            checked={currentBusiness.enableBookings}
-            onCheckedChange={(checked) =>
-              updateCurrentBusiness({ enableBookings: checked })
-            }
-            className="data-[state=checked]:bg-[#05BBC8] data-[state=unchecked]:bg-gray-600 border border-gray-400"
-          />
-            </div>
-            <div className="flex items-center justify-between">
-          <div>
-            <h4 className="font-medium text-white">
-              Allow Price Negotiation
-            </h4>
-            <p className="text-sm text-gray-400">
-              Let customers negotiate prices
-            </p>
-          </div>
-          <Switch
-            checked={currentBusiness.allowNegotiation}
-            onCheckedChange={(checked) =>
-              updateCurrentBusiness({ allowNegotiation: checked })
-            }
-            className="data-[state=checked]:bg-[#05BBC8] data-[state=unchecked]:bg-gray-600 border border-gray-400"
-          />
-            </div>
-            <div className="flex items-center justify-between">
-          <div>
-            <h4 className="font-medium text-white">
-              Delivery Available
-            </h4>
-            <p className="text-sm text-gray-400">
-              Offer delivery services from this branch
-            </p>
-          </div>
-          <Switch
-            checked={currentBusiness.deliveryAvailable}
-            onCheckedChange={(checked) =>
-              updateCurrentBusiness({ deliveryAvailable: checked })
-            }
-            className="data-[state=checked]:bg-[#05BBC8] data-[state=unchecked]:bg-gray-600 border border-gray-400"
-          />
-            </div>
-          </div>
-        </CardContent>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Business Features
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-white">Enable Bookings</h4>
+                    <p className="text-sm text-gray-400">
+                      Allow customers to book appointments
+                    </p>
+                  </div>
+                  <Switch
+                    checked={currentBusiness.enableBookings}
+                    onCheckedChange={(checked) =>
+                      updateCurrentBusiness({ enableBookings: checked })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-white">
+                      Allow Price Negotiation
+                    </h4>
+                    <p className="text-sm text-gray-400">
+                      Let customers negotiate prices
+                    </p>
+                  </div>
+                  <Switch
+                    checked={currentBusiness.allowNegotiation}
+                    onCheckedChange={(checked) =>
+                      updateCurrentBusiness({ allowNegotiation: checked })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium text-white">
+                      Delivery Available
+                    </h4>
+                    <p className="text-sm text-gray-400">
+                      Offer delivery services from this branch
+                    </p>
+                  </div>
+                  <Switch
+                    checked={currentBusiness.deliveryAvailable}
+                    onCheckedChange={(checked) =>
+                      updateCurrentBusiness({ deliveryAvailable: checked })
+                    }
+                  />
+                </div>
+              </div>
+            </CardContent>
           </Card>
 
           <Card className="bg-gray-900 border-gray-700">
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">
-            Working Hours - {currentBranch.name}
-          </h3>
-          <div className="space-y-3">
-            {Object.entries(currentBranch.workingHours).map(
-          ([day, hours]) => (
-            <div key={day} className="flex items-center space-x-4">
-              <div className="w-20 text-sm text-gray-300">{day}</div>
-              <Checkbox
-            checked={!hours.closed}
-            onCheckedChange={(checked) =>
-              updateWorkingHours(day, "closed", !checked)
-            }
-            className="border-gray-400 text-[#05BBC8] data-[state=checked]:bg-[#05BBC8] data-[state=checked]:border-[#05BBC8] data-[state=unchecked]:bg-gray-700"
-              />
-              {!hours.closed ? (
-            <div className="flex items-center space-x-2 flex-1">
-              <Input
-                type="time"
-                value={hours.open}
-                onChange={(e) =>
-              updateWorkingHours(day, "open", e.target.value)
-                }
-                className="bg-gray-800 border-gray-700 text-white text-sm"
-              />
-              <span className="text-gray-400">to</span>
-              <Input
-                type="time"
-                value={hours.close}
-                onChange={(e) =>
-              updateWorkingHours(day, "close", e.target.value)
-                }
-                className="bg-gray-800 border-gray-700 text-white text-sm"
-              />
-            </div>
-              ) : (
-            <div className="flex-1 text-sm text-gray-500">
-              Closed
-            </div>
-              )}
-            </div>
-          )
-            )}
-          </div>
-        </CardContent>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Working Hours - {currentBranch.name}
+              </h3>
+              <div className="space-y-3">
+                {Object.entries(currentBranch.workingHours).map(
+                  ([day, hours]) => (
+                    <div key={day} className="flex items-center space-x-4">
+                      <div className="w-20 text-sm text-gray-300">{day}</div>
+                      <Checkbox
+                        checked={!hours.closed}
+                        onCheckedChange={(checked) =>
+                          updateWorkingHours(day, "closed", !checked)
+                        }
+                      />
+                      {!hours.closed ? (
+                        <div className="flex items-center space-x-2 flex-1">
+                          <Input
+                            type="time"
+                            value={hours.open}
+                            onChange={(e) =>
+                              updateWorkingHours(day, "open", e.target.value)
+                            }
+                            className="bg-gray-800 border-gray-700 text-white text-sm"
+                          />
+                          <span className="text-gray-400">to</span>
+                          <Input
+                            type="time"
+                            value={hours.close}
+                            onChange={(e) =>
+                              updateWorkingHours(day, "close", e.target.value)
+                            }
+                            className="bg-gray-800 border-gray-700 text-white text-sm"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex-1 text-sm text-gray-500">
+                          Closed
+                        </div>
+                      )}
+                    </div>
+                  )
+                )}
+              </div>
+            </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6">
           <Card className="bg-gray-900 border-gray-700">
-        <CardContent className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">
-            Branch Summary
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-          <Avatar className="w-12 h-12">
-            <AvatarFallback className="bg-[#05BBC8] text-black">
-              {currentBusiness.name.slice(0, 2).toUpperCase() || "BN"}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h4 className="font-semibold text-white">
-              {currentBranch.name}
-            </h4>
-            <p className="text-sm text-gray-400">
-              {currentBusiness.category}
-            </p>
-          </div>
-            </div>
-            <div className="space-y-2 text-sm">
-          <div className="flex items-center space-x-2 text-gray-300">
-            <MapPin className="w-4 h-4" />
-            <span>{currentBranch.city}</span>
-          </div>
-          <div className="flex items-center space-x-2 text-gray-300">
-            <Phone className="w-4 h-4" />
-            <span>{currentBranch.phone}</span>
-          </div>
-          <div className="flex items-center space-x-2 text-gray-300">
-            <Settings className="w-4 h-4" />
-            <span>
-              {currentBranch.products.length} products/services
-            </span>
-          </div>
-            </div>
-            <div className="pt-4 border-t border-gray-700">
-          <div className="flex items-center space-x-4 text-sm">
-            <Badge
-              className={
-            currentBusiness.enableBookings
-              ? "bg-green-500 text-white"
-              : "bg-gray-500 text-white"
-              }
-            >
-              {currentBusiness.enableBookings
-            ? "Bookings On"
-            : "Bookings Off"}
-            </Badge>
-            <Badge
-              className={
-            currentBusiness.deliveryAvailable
-              ? "bg-blue-500 text-white"
-              : "bg-gray-500 text-white"
-              }
-            >
-              {currentBusiness.deliveryAvailable
-            ? "Delivery On"
-            : "Delivery Off"}
-            </Badge>
-          </div>
-            </div>
-          </div>
-        </CardContent>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Branch Summary
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Avatar className="w-12 h-12">
+                    <AvatarFallback className="bg-[#05BBC8] text-black">
+                      {currentBusiness.name.slice(0, 2).toUpperCase() || "BN"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h4 className="font-semibold text-white">
+                      {currentBranch.name}
+                    </h4>
+                    <p className="text-sm text-gray-400">
+                      {currentBusiness.category}
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <MapPin className="w-4 h-4" />
+                    <span>{currentBranch.city}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <Phone className="w-4 h-4" />
+                    <span>{currentBranch.phone}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <Settings className="w-4 h-4" />
+                    <span>
+                      {currentBranch.products.length} products/services
+                    </span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-700">
+                  <div className="flex items-center space-x-4 text-sm">
+                    <Badge
+                      className={
+                        currentBusiness.enableBookings
+                          ? "bg-green-500"
+                          : "bg-gray-500"
+                      }
+                    >
+                      {currentBusiness.enableBookings
+                        ? "Bookings On"
+                        : "Bookings Off"}
+                    </Badge>
+                    <Badge
+                      className={
+                        currentBusiness.deliveryAvailable
+                          ? "bg-blue-500"
+                          : "bg-gray-500"
+                      }
+                    >
+                      {currentBusiness.deliveryAvailable
+                        ? "Delivery On"
+                        : "Delivery Off"}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
 
           <Card className="bg-gray-900 border-gray-700">
-        <CardContent className="p-6">
-          <div className="flex items-start space-x-3">
-            <Checkbox
-          checked={currentBusiness.termsAgreed}
-          onCheckedChange={(checked) =>
-            updateCurrentBusiness({ termsAgreed: !!checked })
-          }
-          className="border-gray-400 text-[#05BBC8] data-[state=checked]:bg-[#05BBC8] data-[state=checked]:border-[#05BBC8] data-[state=unchecked]:bg-gray-700"
-            />
-            <div className="text-sm text-gray-300">
-          I agree to Nexa&#39;s{" "}
-          <Link
-            href="/terms"
-            className="text-[#05BBC8] hover:underline"
-          >
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link
-            href="/privacy"
-            className="text-[#05BBC8] hover:underline"
-          >
-            Privacy Policy
-          </Link>
-            </div>
-          </div>
-        </CardContent>
+            <CardContent className="p-6">
+              <div className="flex items-start space-x-3">
+                <Checkbox
+                  checked={currentBusiness.termsAgreed}
+                  onCheckedChange={(checked) =>
+                    updateCurrentBusiness({ termsAgreed: !!checked })
+                  }
+                />
+                <div className="text-sm text-gray-300">
+                  I agree to Nexa&#39;s{" "}
+                  <Link
+                    href="/terms"
+                    className="text-[#05BBC8] hover:underline"
+                  >
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="text-[#05BBC8] hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
           </Card>
         </div>
       </div>
@@ -1579,11 +1577,10 @@ export default function BusinessOnboardingPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-        <p className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">You would be redirected to your dashboard if you&apos;re logged in or sent to the home page if you&apos;re not logged in</p>
         <Link href="/dashboard" passHref>
           <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-black font-semibold px-8 py-3">
             <BarChart3 className="w-5 h-5 mr-2" />
-            Go to Dashboard or Login
+            Go to Dashboard
           </Button>
         </Link>
         <Button
@@ -1672,9 +1669,9 @@ export default function BusinessOnboardingPage() {
     <GradientBackground primaryColor="#05BBC8">
       {/* Header */}
       <header className="bg-black/30 backdrop-blur-md sticky top-0 z-30 border-b border-[#05BBC8]/20">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-3 sm:py-4">
-          <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2 xs:gap-0">
-            <div className="flex items-center space-x-2 sm:space-x-4 w-full xs:w-auto">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
               <Link href="/list-business">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
@@ -1684,10 +1681,10 @@ export default function BusinessOnboardingPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-white hover:bg-gray-800/50 p-1 sm:p-2"
+                    className="text-white hover:bg-gray-800/50"
                   >
-                    <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    <span className="text-xs sm:text-sm">Back</span>
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back
                   </Button>
                 </motion.div>
               </Link>
@@ -1695,18 +1692,12 @@ export default function BusinessOnboardingPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex items-center space-x-2 sm:space-x-3"
+                className="flex items-center space-x-3"
               >
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center">
-                    <Image
-                    src="/nexa-favicon.png"
-                    alt="Nexa Logo"
-                    width={28}
-                    height={28}
-                    className="object-contain w-5 h-5 sm:w-7 sm:h-7"
-                    />
+                <div className="w-8 h-8 bg-[#05BBC8] rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">N</span>
                 </div>
-                <span className="text-sm sm:text-lg md:text-xl font-semibold text-white">
+                <span className="text-xl font-semibold text-white">
                   Business Setup
                 </span>
               </motion.div>
@@ -1715,16 +1706,16 @@ export default function BusinessOnboardingPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center space-x-2 sm:space-x-4 w-full xs:w-auto justify-between xs:justify-start"
+              className="flex items-center space-x-4"
             >
               <Badge
                 variant="outline"
-                className="text-[#05BBC8] border-[#05BBC8] text-xs"
+                className="text-[#05BBC8] border-[#05BBC8]"
               >
                 {onboardingState.businesses.length} Business
                 {onboardingState.businesses.length !== 1 ? "es" : ""}
               </Badge>
-              <span className="text-xs sm:text-sm text-gray-300">
+              <span className="text-sm text-gray-300">
                 Step {currentStep} of {totalSteps}
               </span>
             </motion.div>
@@ -1733,7 +1724,7 @@ export default function BusinessOnboardingPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Step Indicator */}
         <StepIndicator 
           currentStep={currentStep} 
@@ -1742,14 +1733,14 @@ export default function BusinessOnboardingPage() {
         />
 
         {/* Step Content */}
-        <StepTransitionWrapper transitionKey={currentStep}>
+        <StepTransitionWrapper step={currentStep} transitionKey={currentStep}>
           <div className="mb-12">{renderCurrentStep()}</div>
         </StepTransitionWrapper>
 
         {/* Navigation */}
         {currentStep < 7 && (
           <motion.div 
-            className="flex flex-col sm:flex-row items-center gap-3 sm:justify-between mt-8"
+            className="flex items-center justify-between mt-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
@@ -1759,7 +1750,6 @@ export default function BusinessOnboardingPage() {
               onClick={handlePrevious}
               disabled={currentStep === 1}
               isBack
-              className="w-full sm:w-auto order-2 sm:order-1"
             >
               Previous
             </AnimatedButton>
@@ -1769,12 +1759,11 @@ export default function BusinessOnboardingPage() {
               onClick={handleNext}
               disabled={!canProceed()}
               isForward
-              className="w-full sm:w-auto order-1 sm:order-2"
             >
               {currentStep === 6 ? (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  <span className="whitespace-nowrap">Launch All Businesses</span>
+                  Launch All Businesses
                 </>
               ) : (
                 <>Continue</>
