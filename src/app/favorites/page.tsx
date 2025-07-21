@@ -73,7 +73,9 @@ export default function FavoritesPage() {
                     isPopular: false,
                     isPromoted: true,
                     type: "booking",
-                    matchScore: 0
+                    matchScore: 0,
+                    totalReviews: favorite.totalReviews ?? 0,
+                    images: favorite.images ?? [],  
                   }}
                   isFavorite={true}
                   onToggleFavorite={() => {}}

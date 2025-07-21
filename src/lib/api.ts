@@ -66,6 +66,47 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+export interface Business {
+  id: string;
+  name: string;
+  description?: string;
+  email: string;
+  phone: string;
+  category: string;
+  city: string;
+  address?: string;
+  location?: {
+    type: string;
+    coordinates: [number, number];
+  };
+  photos: string[];
+  logo?: string;
+  isActive: boolean;
+  owner?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BusinessRequest {
+  name: string;
+  description?: string;
+  email: string;
+  phone: string;
+  category: string;
+  city: string;
+  address?: string;
+  photos?: string[];
+  logo?: string;
+  heroTitle?: string;
+  heroTagline?: string;
+  heroBanner?: string;
+  themeColor?: string;
+  ctaText?: string;
+  enableBookings?: boolean;
+  allowNegotiation?: boolean;
+  deliveryAvailable?: boolean;
+}
+
 class ApiClient {
   private baseURL: string;
 
@@ -234,6 +275,45 @@ class ApiClient {
 
   async getAuthStatus(): Promise<ApiResponse<{ isAuthenticated: boolean; user?: User }>> {
     return this.request<{ isAuthenticated: boolean; user?: User }>('/auth/status');
+  }
+
+  // Business API Methods
+  async createBusiness(businessData: BusinessRequest): Promise<ApiResponse<Business>> {
+    return this.request<Business>('/businesses', {
+      method: 'POST',
+      body: JSON.stringify(businessData),
+    });
+  }
+
+  async getBusinessById(id: string): Promise<ApiResponse<Business>> {
+    return this.request<Business>(`/businesses/${id}`);
+  }
+
+  async updateBusiness(id: string, updates: Partial<BusinessRequest>): Promise<ApiResponse<Business>> {
+    return this.request<Business>(`/businesses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  }
+
+  async deleteBusiness(id: string): Promise<ApiResponse<void>> {
+    return this.request<void>(`/businesses/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getAllBusinesses(params?: { page?: number; limit?: number; category?: string; city?: string; search?: string }): Promise<ApiResponse<{ businesses: Business[]; pagination: { page: number; limit: number; total: number; pages: number } }>> {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.category) queryParams.append('category', params.category);
+    if (params?.city) queryParams.append('city', params.city);
+    if (params?.search) queryParams.append('search', params.search);
+    
+    const query = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    
+    return this.request<{ businesses: Business[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/businesses${query}`);
   }
 
   // Helper methods for managing auth data

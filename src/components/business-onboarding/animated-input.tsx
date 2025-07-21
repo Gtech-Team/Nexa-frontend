@@ -17,6 +17,7 @@ interface AnimatedInputProps {
   autoFocus?: boolean;
   className?: string;
   delay?: number;
+  icon?: React.ReactNode;
 }
 
 export const AnimatedInput: React.FC<AnimatedInputProps> = ({

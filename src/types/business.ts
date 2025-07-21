@@ -1,5 +1,8 @@
 // Types for business-related data
 export interface Business {
+  images: string[]
+  coverImage?: string
+  totalReviews: number
   id: string
   name: string
   logo: string

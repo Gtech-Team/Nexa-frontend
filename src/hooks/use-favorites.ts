@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 
 export interface FavoriteBusiness {
+  images: string[]
+  totalReviews: number
   id: string
   name: string
   category: string

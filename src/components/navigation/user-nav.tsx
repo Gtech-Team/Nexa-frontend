@@ -22,10 +22,11 @@ export default function UserNav() {
       <>
         <Button
           onClick={() => showAuthModal()}
-          variant="outline"
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          variant="ghost"
+          size="sm"
+          className="text-gray-700 hover:bg-gray-50 p-2"
         >
-          Login / Sign Up
+          <UserIcon className="w-5 h-5" />
         </Button>
         <NewAuthModal
           isOpen={authModal.isOpen}
@@ -55,14 +56,14 @@ export default function UserNav() {
             : "U")}
             </AvatarFallback>
           </Avatar>
-          <div className="text-left">
+          <div className="text-left hidden sm:block">
             <p className="font-semibold text-gray-900 text-sm leading-tight">
           {user?.fullName ? user.fullName.split(" ")[0] : "User"}
             </p>
             <p className="text-xs text-gray-500">View Dashboard</p>
           </div>
         </div>
-        <ChevronDown className="w-4 h-4 text-gray-500" />
+        <ChevronDown className="w-4 h-4 text-gray-500 hidden sm:block" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white">

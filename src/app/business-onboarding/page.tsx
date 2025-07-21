@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/components/auth/auth-provider";
+import { apiClient } from "@/lib/api";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +45,8 @@ import {
   Copy,
   Edit,
   Trash2,
+  AlertCircle,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -54,6 +58,7 @@ import { AnimatedButton } from "@/components/business-onboarding/animated-button
 import { StepTransitionWrapper } from "@/components/business-onboarding/step-transition-wrapper";
 import { BusinessTypeSelector } from "@/components/business-onboarding/business-type-selector";
 import { AnimatedInput } from "@/components/business-onboarding/animated-input";
+import { AccountStep } from "@/components/business-onboarding/account-step";
 
 // Types
 interface BusinessBranch {
@@ -101,12 +106,22 @@ interface WorkingHours {
   [key: string]: { open: string; close: string; closed: boolean };
 }
 
+interface UserInformation {
+  fullName: string;
+  email: string;
+  phone: string;
+  password?: string;
+  city?: string;
+  isExistingUser: boolean;
+}
+
 interface OnboardingState {
   businesses: BusinessProfile[];
   currentBusinessIndex: number;
   currentBranchIndex: number;
   isAddingNewBusiness: boolean;
   isAddingNewBranch: boolean;
+  userInfo: UserInformation;
 }
 
 const businessTypes = [
@@ -209,24 +224,62 @@ const createEmptyBranch = (businessName: string): BusinessBranch => ({
 
 export default function BusinessOnboardingPage() {
   // Track if this component has been mounted
-   
+  const auth = useContext(AuthContext);
+  
   const [hasMounted, setHasMounted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [onboardingState, setOnboardingState] = useState<OnboardingState>({
     businesses: [createEmptyBusiness()],
     currentBusinessIndex: 0,
     currentBranchIndex: 0,
     isAddingNewBusiness: false,
     isAddingNewBranch: false,
+    userInfo: {
+      fullName: auth?.user?.fullName || "",
+      email: auth?.user?.email || "",
+      phone: auth?.user?.phone || "",
+      password: "",
+      city: auth?.user?.city || "",
+      isExistingUser: !!auth?.user
+    }
   });
 
   useEffect(() => {
     setHasMounted(true);
-  }, []);
-
-  const totalSteps = 7;
+    
+    // If user is already authenticated, update the onboarding state
+    if (auth?.user) {
+      setOnboardingState(prev => ({
+        ...prev,
+        userInfo: {
+          fullName: auth.user?.fullName || "",
+          email: auth.user?.email || "",
+          phone: auth.user?.phone || "",
+          city: auth.user?.city || "",
+          isExistingUser: true
+        }
+      }));
+    }
+  }, [auth?.user]);
   
-  const stepTitles = [
+  // Check if user is authenticated
+  const isAuthenticated = !!auth?.user;
+  
+  // Add 1 for auth step if user is not authenticated
+  const totalSteps = isAuthenticated ? 7 : 8;
+  
+  const stepTitles = isAuthenticated ? [
+    "Business Type",
+    "Basic Info",
+    "Products",
+    "Appearance",
+    "Operations",
+    "Review",
+    "Launch"
+  ] : [
+    "Account",
     "Business Type",
     "Basic Info",
     "Products",
@@ -241,7 +294,127 @@ export default function BusinessOnboardingPage() {
   const currentBranch =
     currentBusiness?.branches[onboardingState.currentBranchIndex];
 
-  const handleNext = () => {
+  // Handle user field changes
+  const handleUserFieldChange = (field: string, value: string) => {
+    setOnboardingState({
+      ...onboardingState,
+      userInfo: {
+        ...onboardingState.userInfo,
+        [field]: value,
+      },
+    });
+    
+    // Clear any error when the user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors({
+        ...validationErrors,
+        [field]: "",
+      });
+    }
+  };
+
+  // Toggle between login and signup forms
+  const toggleExistingUser = () => {
+    setOnboardingState({
+      ...onboardingState,
+      userInfo: {
+        ...onboardingState.userInfo,
+        isExistingUser: !onboardingState.userInfo.isExistingUser,
+      },
+    });
+    // Clear errors when toggling
+    setValidationErrors({});
+  };
+
+  // Handle authentication for account step
+  const handleAccountStepSubmission = async (): Promise<boolean> => {
+    setIsLoading(true);
+    setValidationErrors({});
+    
+    try {
+      const { fullName, email, phone, password, city, isExistingUser } = onboardingState.userInfo;
+      
+      // Validate fields
+      const errors: Record<string, string> = {};
+      
+      if (isExistingUser) {
+        // Login validation
+        if (!email) errors.email = "Email is required";
+        if (!password) errors.password = "Password is required";
+      } else {
+        // Registration validation
+        if (!fullName) errors.fullName = "Full name is required";
+        if (!email) errors.email = "Email is required";
+        if (!phone) errors.phone = "Phone number is required";
+        if (!password) errors.password = "Password is required";
+        if (password && password.length < 8) errors.password = "Password must be at least 8 characters";
+      }
+      
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        setIsLoading(false);
+        return false;
+      }
+      
+      // Attempt login or registration
+      if (isExistingUser) {
+        const result = await auth?.login({
+          email,
+          password: password ?? "",
+        });
+        
+        if (!result?.success) {
+          setValidationErrors({
+            general: result?.message || "Login failed. Please check your credentials.",
+          });
+          setIsLoading(false);
+          return false;
+        }
+      } else {
+        const result = await auth?.register({
+          fullName,
+          email,
+          phone,
+          password: password ?? "",
+          confirmPassword: password ?? "", // We already validated this on the frontend
+          role: "business", // Set role as business since this is business onboarding
+          city,
+        });
+        
+        if (!result?.success) {
+          setValidationErrors({
+            general: result?.message || "Registration failed. Please try again.",
+          });
+          setIsLoading(false);
+          return false;
+        }
+      }
+      
+      setIsLoading(false);
+      return true;
+    } catch (error) {
+      console.error("Authentication error:", error);
+      setValidationErrors({
+        general: "An unexpected error occurred. Please try again.",
+      });
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  const handleNext = async () => {
+    // If we're on the account step and the user is not authenticated
+    if (!isAuthenticated && currentStep === 1) {
+      const success = await handleAccountStepSubmission();
+      if (!success) return; // Don't proceed if authentication failed
+    }
+    
+    if (currentStep === totalSteps) {
+      // Submit the entire onboarding data to the backend
+      await submitOnboardingData();
+      return;
+    }
+    
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     }
@@ -250,6 +423,72 @@ export default function BusinessOnboardingPage() {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+    }
+  };
+  
+  // Function to submit all onboarding data to the backend
+  const submitOnboardingData = async () => {
+    setIsLoading(true);
+    try {
+      // Submit each business to the backend
+      const results = [];
+      
+      for (const business of onboardingState.businesses) {
+        const mainBranch = business.branches.find(branch => branch.isMainBranch) || business.branches[0];
+        
+        // Prepare the business data
+        const businessData = {
+          name: business.name,
+          description: business.description,
+          category: business.category,
+          email: mainBranch.email || onboardingState.userInfo.email, // Use branch email if available, otherwise user email
+          phone: mainBranch.phone || onboardingState.userInfo.phone, // Use branch phone if available, otherwise user phone
+          city: mainBranch.city,
+          address: mainBranch.address,
+          photos: [],
+          logo: business.logo || "",
+          heroTitle: business.heroTitle || "",
+          heroTagline: business.heroTagline || "",
+          heroBanner: business.heroBanner || "",
+          themeColor: business.themeColor || "#05BBC8",
+          ctaText: business.ctaText || "Contact Us",
+          enableBookings: business.enableBookings,
+          allowNegotiation: business.allowNegotiation,
+          deliveryAvailable: business.deliveryAvailable,
+        };
+        
+        // Use the API client to create the business
+        const response = await apiClient.createBusiness(businessData);
+        
+        if (!response.success) {
+          throw new Error(response.message || `Failed to create business: ${business.name}`);
+        }
+        
+        results.push(response.data);
+        
+        // Update the business ID in our state for sharing links
+        const updatedBusinesses = [...onboardingState.businesses];
+        const index = updatedBusinesses.findIndex(b => b.id === business.id);
+        if (index !== -1 && response.data) {
+          updatedBusinesses[index].id = response.data.id;
+        }
+        
+        setOnboardingState({
+          ...onboardingState,
+          businesses: updatedBusinesses
+        });
+      }
+      
+      // All businesses created successfully
+      setCurrentStep(totalSteps); // Move to the last step
+      setIsLoading(false);
+      
+    } catch (error) {
+      console.error("Error submitting business data:", error);
+      setValidationErrors({
+        general: error instanceof Error ? error.message : "Failed to create your business. Please try again."
+      });
+      setIsLoading(false);
     }
   };
 
@@ -733,7 +972,8 @@ export default function BusinessOnboardingPage() {
                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                         <p className="text-sm text-gray-400">Upload logo</p>
                       </>
-                    )}
+                    )
+                    }
                     <input
                       id="logo-upload"
                       type="file"
@@ -1386,7 +1626,6 @@ export default function BusinessOnboardingPage() {
           You can add more businesses, branches, or proceed to launch
         </p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <Card className="bg-gray-900 border-gray-700 hover:border-[#05BBC8] transition-all cursor-pointer group">
           <CardContent className="p-8 text-center">
@@ -1603,6 +1842,31 @@ export default function BusinessOnboardingPage() {
             variant="ghost"
             size="sm"
             className="text-[#05BBC8] hover:text-[#049aa5]"
+            onClick={() => {
+              // Generate shareable links for all businesses
+              const baseUrl = window.location.origin;
+              const businessLinks = onboardingState.businesses.map(business => 
+                `${business.name}: ${baseUrl}/business/${business.id}`
+              ).join('\n');
+              
+              // Copy to clipboard
+              navigator.clipboard.writeText(businessLinks)
+                .then(() => {
+                  // Show toast or notification
+                  alert("Business links copied to clipboard!");
+                })
+                .catch(err => {
+                  console.error("Failed to copy links: ", err);
+                  // Fallback
+                  const textArea = document.createElement("textarea");
+                  textArea.value = businessLinks;
+                  document.body.appendChild(textArea);
+                  textArea.select();
+                  document.execCommand("copy");
+                  document.body.removeChild(textArea);
+                  alert("Business links copied to clipboard!");
+                });
+            }}
           >
             <Copy className="w-4 h-4 mr-2" />
             Copy Links
@@ -1612,8 +1876,36 @@ export default function BusinessOnboardingPage() {
     </div>
   );
 
+  const renderAccountStep = () => (
+    <StepCard
+      title="Create your account"
+      subtitle="Set up your account to connect with your business"
+      icon={<User className="w-6 h-6" />}
+    >
+      <AccountStep
+        fullName={onboardingState.userInfo.fullName}
+        email={onboardingState.userInfo.email}
+        phone={onboardingState.userInfo.phone}
+        password={onboardingState.userInfo.password || ""}
+        city={onboardingState.userInfo.city || ""}
+        isExistingUser={onboardingState.userInfo.isExistingUser}
+        onFieldChange={handleUserFieldChange}
+        onToggleExistingUser={toggleExistingUser}
+        errors={validationErrors}
+      />
+    </StepCard>
+  );
+
   const renderCurrentStep = () => {
-    switch (currentStep) {
+    // If user is not authenticated and we're on step 1, show the account step
+    if (!isAuthenticated && currentStep === 1) {
+      return renderAccountStep();
+    }
+    
+    // For authenticated users, adjust the step index
+    const adjustedStep = isAuthenticated ? currentStep : currentStep - 1;
+    
+    switch (adjustedStep) {
       case 1:
         return renderStep1();
       case 2:
@@ -1634,7 +1926,21 @@ export default function BusinessOnboardingPage() {
   };
 
   const canProceed = () => {
-    switch (currentStep) {
+    // If we're on the account step and user is not authenticated
+    if (!isAuthenticated && currentStep === 1) {
+      const { fullName, email, phone, password, isExistingUser } = onboardingState.userInfo;
+      
+      if (isExistingUser) {
+        return !!email && !!password;
+      } else {
+        return !!fullName && !!email && !!phone && !!password && password.length >= 8;
+      }
+    }
+    
+    // Adjust step number for authenticated users
+    const adjustedStep = isAuthenticated ? currentStep : currentStep - 1;
+    
+    switch (adjustedStep) {
       case 1:
         return currentBusiness.type !== "";
       case 2:
@@ -1665,6 +1971,88 @@ export default function BusinessOnboardingPage() {
         return true;
       default:
         return false;
+    }
+  };
+
+  const updateUserInfo = (updates: Partial<UserInformation>) => {
+    setOnboardingState({
+      ...onboardingState,
+      userInfo: {
+        ...onboardingState.userInfo,
+        ...updates,
+      },
+    });
+  };
+
+  const handleSignup = async () => {
+    if (!auth) return;
+    
+    try {
+      const { fullName, email, phone, password, city } = onboardingState.userInfo;
+      
+      if (!fullName || !email || !phone || !password) {
+        // Display error message
+        return;
+      }
+      
+      const result = await auth.register({
+        fullName,
+        email,
+        phone,
+        password,
+        confirmPassword: password,
+        role: 'business',
+        city
+      });
+      
+      if (result.success) {
+        // Move to next step
+        setCurrentStep(currentStep + 1);
+      } else {
+        // Handle error
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error("Failed to register:", error);
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!auth) return;
+    
+    try {
+      const { email, password } = onboardingState.userInfo;
+      
+      if (!email || !password) {
+        // Display error message
+        return;
+      }
+      
+      const result = await auth.login({
+        email,
+        password
+      });
+      
+      if (result.success) {
+        // Update user info state and move to next step
+        setOnboardingState(prev => ({
+          ...prev,
+          userInfo: {
+            ...prev.userInfo,
+            fullName: auth.user?.fullName || prev.userInfo.fullName,
+            email: auth.user?.email || prev.userInfo.email,
+            phone: auth.user?.phone || prev.userInfo.phone,
+            city: auth.user?.city || prev.userInfo.city,
+            isExistingUser: true
+          }
+        }));
+        setCurrentStep(currentStep + 1);
+      } else {
+        // Handle error
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error("Failed to login:", error);
     }
   };
 
@@ -1743,7 +2131,19 @@ export default function BusinessOnboardingPage() {
 
         {/* Step Content */}
         <StepTransitionWrapper transitionKey={currentStep}>
-          <div className="mb-12">{renderCurrentStep()}</div>
+          <div className="mb-12">
+            {validationErrors.general && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 p-4 rounded-lg bg-red-500/20 text-red-200 border border-red-500/30 mb-6"
+              >
+                <AlertCircle className="w-5 h-5" />
+                <span>{validationErrors.general}</span>
+              </motion.div>
+            )}
+            {renderCurrentStep()}
+          </div>
         </StepTransitionWrapper>
 
         {/* Navigation */}
@@ -1757,7 +2157,7 @@ export default function BusinessOnboardingPage() {
             <AnimatedButton
               variant="outline"
               onClick={handlePrevious}
-              disabled={currentStep === 1}
+              disabled={currentStep === 1 || isLoading}
               isBack
               className="w-full sm:w-auto order-2 sm:order-1"
             >
@@ -1767,11 +2167,16 @@ export default function BusinessOnboardingPage() {
             <AnimatedButton
               variant="primary"
               onClick={handleNext}
-              disabled={!canProceed()}
+              disabled={!canProceed() || isLoading}
               isForward
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              {currentStep === 6 ? (
+              {isLoading ? (
+                <div className="flex items-center">
+                  <span className="mr-2">Loading</span>
+                  <div className="h-4 w-4 rounded-full border-2 border-t-transparent border-white animate-spin"></div>
+                </div>
+              ) : currentStep === 6 ? (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
                   <span className="whitespace-nowrap">Launch All Businesses</span>

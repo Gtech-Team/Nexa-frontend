@@ -30,7 +30,10 @@ export default function BusinessProfileHero({ business }: BusinessProfileHeroPro
         rating: business.rating,
         price: business.price,
         logo: business.logo,
-        verified: business.verified
+        verified: business.verified,
+        totalReviews: business.totalReviews ?? 0,
+        images: Array.isArray(business.images) ? business.images : [],
+        // featured: business.featured ?? false,
       })
     } catch (error) {
       console.error('Error toggling favorite:', error)

@@ -1,0 +1,228 @@
+'use client'
+
+import { useState } from "react"
+import { Heart, MapPin, Star, Verified, Eye, ShoppingCart, Calendar, MessageCircle, Check } from "lucide-react"
+import Image from "next/image"
+import type { Business } from "@/types/business"
+import { useRouter } from "next/navigation"
+
+interface BusinessCardMobileProps {
+  business: Business
+  onToggleFavorite: (id: string) => void
+  isFavorite: boolean
+}
+
+export default function BusinessCardMobile({ business, onToggleFavorite, isFavorite }: BusinessCardMobileProps) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const router = useRouter()
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer" onClick={() => router.push(`/business/${business.id}`)}>
+      {/* If card is featured, add yellow border */}
+      {business.featured && (
+        <div className="absolute inset-0 rounded-2xl ring-2 ring-yellow-400/50 pointer-events-none"></div>
+      )}
+      {/* Business Image */}
+      <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200">
+        {business.coverImage ? (
+          <Image
+            src={business.coverImage}
+            alt={business.name}
+            fill
+            className={`object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+            sizes="(max-width: 768px) 50vw, 33vw"
+          />
+        ) : business.images && business.images.length > 0 ? (
+          <Image
+            src={business.images[0]}
+            alt={business.name}
+            fill
+            className={`object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+            sizes="(max-width: 768px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+              <ShoppingCart className="w-6 h-6 text-gray-400" />
+            </div>
+          </div>
+        )}
+        
+        {/* Featured Badge */}
+        {business.featured && (
+          <div
+            className="
+          absolute
+          right-2
+          top-2
+          sm:top-0
+          bg-gradient-to-r from-yellow-400 to-yellow-500 text-black
+          px-2 py-0.5 sm:px-3 sm:py-1
+          rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg
+          z-10
+        "
+            style={{
+              // On mobile, move badge down a bit to avoid overlap with heart button
+              // On sm+ screens, keep at top
+              top: "0rem",
+              right: "0.5rem",
+            }}
+          >
+            <Star className="w-2 h-2 sm:w-3 sm:h-3 fill-current" />
+            <span>Featured</span>
+          </div>
+        )}
+
+        {/* Favorite Button */}
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation() // Prevent card click from triggering
+            onToggleFavorite(business.id)
+          }}
+          className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-white rounded-full shadow-sm transition-all"
+        >
+          <Heart
+            className={`w-4 h-4 transition-colors ${
+              isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'
+            }`}
+          />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-3">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {/* Logo */}
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex-shrink-0 relative overflow-hidden">
+              {business.logo ? (
+                <Image
+                  src={business.logo}
+                  alt={`${business.name} logo`}
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#05BBC8]/20 to-[#05BBC8]/10">
+                  <span className="text-[#05BBC8] text-xs font-bold">
+                    {business.name.charAt(0)}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Name and Category */}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1 mb-1">
+                <h3 className="font-semibold text-gray-900 text-sm truncate">
+                  {business.name}
+                </h3>
+                {business.verified && (
+                  <Verified className="w-3 h-3 text-blue-500 fill-blue-500 flex-shrink-0" />
+                )}
+              </div>
+              <div className="flex items-center gap-1 text-xs text-gray-500">
+                <div className="flex items-center gap-1">
+                  {business.verified && (
+                    <div className="bg-blue-100 text-blue-800 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full">
+                      <Check className="w-2.5 h-2.5" />
+                      <span>Verified</span>
+                    </div>
+                  )}
+                  <span className="bg-gray-100 px-2 py-0.5 rounded-full truncate">
+                    {business.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Location and Rating */}
+        <div className="flex items-center justify-between mb-2 text-xs">
+          <div className="flex items-center gap-1 text-gray-500">
+            <MapPin className="w-3 h-3" />
+            <span className="truncate">{business.city}</span>
+          </div>
+          <div className="flex items-center gap-1 text-amber-500">
+            <Star className="w-3 h-3 fill-current" />
+            <span className="font-medium">{business.rating}</span>
+            <span className="text-gray-400">({business.totalReviews || 0})</span>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-gray-600 text-xs mb-3 line-clamp-2 leading-relaxed">
+          {business.description}
+        </p>
+
+        {/* Price and Actions */}
+        <div className="flex items-center justify-between pt-2 border-t border-gray-50">
+          <div className="text-xs">
+            <span className="font-bold text-[#05BBC8]">{business.price}</span>
+          </div>
+          
+          <div className="flex gap-2">
+            {/* View Button */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation() // Prevent card click from triggering
+                console.log("Navigating to business ID:", business.id)
+                router.push(`/business/${business.id}`)
+              }}
+              className="flex items-center gap-1 px-3 py-1.5 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs"
+            >
+              <Eye className="w-3 h-3" />
+              <span>View</span>
+            </button>
+
+            {/* Dynamic Button based on business type */}
+            {(() => {
+              const btnClass = "flex items-center gap-1 px-3 py-1.5 bg-[#05BBC8] text-white rounded-lg hover:bg-[#049aa5] transition-colors text-xs";
+              
+              switch(business.type) {
+                case "order":
+                  return (
+                    <button 
+                      onClick={(e) => e.stopPropagation()} 
+                      className={btnClass}
+                    >
+                      <ShoppingCart className="w-3 h-3" />
+                      <span>Order</span>
+                    </button>
+                  );
+                case "booking":
+                  return (
+                    <button 
+                      onClick={(e) => e.stopPropagation()} 
+                      className={btnClass}
+                    >
+                      <Calendar className="w-3 h-3" />
+                      <span>Book</span>
+                    </button>
+                  );
+                case "negotiation":
+                  return (
+                    <button 
+                      onClick={(e) => e.stopPropagation()} 
+                      className={btnClass}
+                    >
+                      <MessageCircle className="w-3 h-3" />
+                      <span>Negotiate</span>
+                    </button>
+                  );
+                default:
+                  return null;
+              }
+            })()}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
