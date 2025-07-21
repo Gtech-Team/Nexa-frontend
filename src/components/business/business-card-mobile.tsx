@@ -52,25 +52,8 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
         
         {/* Featured Badge */}
         {business.featured && (
-          <div
-            className="
-          absolute
-          right-2
-          top-2
-          sm:top-0
-          bg-gradient-to-r from-yellow-400 to-yellow-500 text-black
-          px-2 py-0.5 sm:px-3 sm:py-1
-          rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg
-          z-10
-        "
-            style={{
-              // On mobile, move badge down a bit to avoid overlap with heart button
-              // On sm+ screens, keep at top
-              top: "0rem",
-              right: "0.5rem",
-            }}
-          >
-            <Star className="w-2 h-2 sm:w-3 sm:h-3 fill-current" />
+          <div className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-2 py-0.5 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg z-10">
+            <Star className="w-2 h-2 fill-current" />
             <span>Featured</span>
           </div>
         )}

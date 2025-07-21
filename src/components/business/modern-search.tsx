@@ -338,7 +338,7 @@ export default function ModernSearch({
               {/* Search Button */}
               <button
                 type="submit"
-                className="bg-gradient-to-r from-[#05BBC8] to-[#049aa5] text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all font-medium text-lg"
+                className="bg-gradient-to-r from-[#05BBC8] to-[#049aa5] text-white px-4 py-1 rounded-xl hover:shadow-lg transition-all font-medium text-lg"
               >
                 Search
               </button>

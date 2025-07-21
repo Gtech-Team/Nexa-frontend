@@ -1,6 +1,5 @@
 import { Search } from "lucide-react"
 import { BusinessGridProps } from "@/types/business"
-import BusinessCard from "./business-card"
 import BusinessCardMobile from "./business-card-mobile"
 
 export default function BusinessGrid({ businesses, favorites, onToggleFavorite, isLoading = false }: BusinessGridProps) {
@@ -69,22 +68,12 @@ export default function BusinessGrid({ businesses, favorites, onToggleFavorite, 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         {businesses.map((business) => (
           <div key={business.id} className="w-full">
-            {/* Mobile-optimized card for lg screens and below */}
-            <div className="block lg:hidden">
-              <BusinessCardMobile
-                business={business}
-                onToggleFavorite={onToggleFavorite}
-                isFavorite={favorites.includes(business.id)}
-              />
-            </div>
-            {/* Regular card for xl screens and above */}
-            <div className="hidden lg:block">
-              <BusinessCard
-                business={business}
-                onToggleFavorite={onToggleFavorite}
-                isFavorite={favorites.includes(business.id)}
-              />
-            </div>
+            {/* Use mobile card design for all screen sizes */}
+            <BusinessCardMobile
+              business={business}
+              onToggleFavorite={onToggleFavorite}
+              isFavorite={favorites.includes(business.id)}
+            />
           </div>
         ))}
       </div>

@@ -18,6 +18,9 @@ export const mockBusinesses: Business[] = [
     featured: true,
     verified: true,
     isPromoted: true,
+    images: [],
+    totalReviews: 4,
+    coverImage: "https://cdn.guardian.ng/wp-content/uploads/2024/11/Tantalizers_Reach.webp"
   },
   {
     id: "2",
@@ -34,6 +37,9 @@ export const mockBusinesses: Business[] = [
     featured: true,
     verified: true,
     isPromoted: true,
+    images: [],
+    totalReviews: 4,
+    coverImage: "https://www.genesishotels.ng/static/media/genesis_hotels.b636c047091be6aa595d.png"
   },
   {
     id: "3",
@@ -49,6 +55,9 @@ export const mockBusinesses: Business[] = [
     featured: false,
     verified: true,
     isPromoted: false,
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpj6Iteb7KlE0yiFR005pMdDWm3Qlsb_qkNQ&s",
+    images: [],
+    totalReviews: 3
   },
   {
     id: "4",
@@ -65,6 +74,9 @@ export const mockBusinesses: Business[] = [
     featured: false,
     verified: false,
     isPromoted: false,
+    images: [],
+    totalReviews: 3,
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtvoarAcRoTe5ScRtXtLyhw_pTrW2WfVvAvQ&s"
   },
   {
     id: "5",
@@ -81,6 +93,9 @@ export const mockBusinesses: Business[] = [
     featured: true,
     verified: true,
     isPromoted: true,
+      images: [],
+    totalReviews: 3,
+    coverImage: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/f0/4a/57/hotel-exterior.jpg?w=700&h=-1&s=1"
   },
   {
     id: "6",
@@ -96,6 +111,9 @@ export const mockBusinesses: Business[] = [
     featured: false,
     verified: true,
     isPromoted: false,
+    images: [],
+    totalReviews: 4,
+    coverImage: "https://img.freepik.com/free-vector/flat-design-spa-facebook-cover-template_23-2149253687.jpg?semt=ais_hybrid&w=740"
   },
   {
     id: "7",
@@ -111,6 +129,9 @@ export const mockBusinesses: Business[] = [
     featured: false,
     verified: false,
     isPromoted: false,
+    images: [],
+    totalReviews: 2,
+    coverImage: "https://img.freepik.com/free-vector/flat-design-spa-facebook-cover-template_23-2149253687.jpg?semt=ais_hybrid&w=740"
   },
   {
         id: "8",
@@ -126,6 +147,9 @@ export const mockBusinesses: Business[] = [
         featured: true,
         verified: true,
         isPromoted: true,
+        images: [],
+        totalReviews: 5,
+        coverImage: "https://img.freepik.com/free-vector/flat-design-spa-facebook-cover-template_23-2149253687.jpg?semt=ais_hybrid&w=740"
     },
     
     {
@@ -142,6 +166,9 @@ export const mockBusinesses: Business[] = [
         featured: false,
         verified: true,
         isPromoted: false,
+        coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh_hiMmWXCujW7wLQNeEsD-1U1P3bg2RlJKA&s",
+        totalReviews: 4,
+        images: [],
     },
     
     {
@@ -158,6 +185,9 @@ export const mockBusinesses: Business[] = [
         featured: true,
         verified: true,
         isPromoted: true,
+        totalReviews: 4,
+        images: [],
+        coverImage: "https://img.freepik.com/free-vector/realistic-night-club-facebook-cover_23-2149917664.jpg"
     },
     
     {
@@ -174,6 +204,9 @@ export const mockBusinesses: Business[] = [
         featured: false,
         verified: true,
         isPromoted: false,
+        totalReviews: 4,
+        images: [],
+        coverImage: "https://www.shutterstock.com/image-photo/disco-background-balls-purple-gold-260nw-2262948683.jpg"
     },
 
 ]
