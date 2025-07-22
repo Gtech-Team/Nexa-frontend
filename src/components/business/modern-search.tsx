@@ -237,7 +237,7 @@ export default function ModernSearch({
   const quickSearchTags = ['Restaurants', 'Hotels', 'Beauty Salons', 'Auto Repair', 'Gyms', 'Healthcare']
 
   return (
-    <div className="w-full max-w-6xl mx-auto mb-8">
+    <div className="w-full max-w-7xl mx-auto mb-8">
       {/* Main Search Container */}
       <div className="rounded-2xl shadow-lg border border-gray-100 overflow-visible backdrop-blur-sm bg-white/95 relative">
         
