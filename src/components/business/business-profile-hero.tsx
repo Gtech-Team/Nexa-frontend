@@ -8,6 +8,7 @@ import { ArrowLeft, Check, Heart, MapPin, Star, Share2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useFavorites } from "@/hooks/use-favorites"
 import { useState } from "react"
+import Image from "next/image"
 
 interface BusinessProfileHeroProps {
   business: Business
@@ -58,7 +59,34 @@ export default function BusinessProfileHero({ business }: BusinessProfileHeroPro
   return (
     <div className="relative">
       {/* Hero Background */}
-      <div className="h-48 sm:h-64 bg-gradient-to-r from-[#05BBC8] to-[#049aa5] relative">
+      <div className="h-48 sm:h-64 relative overflow-hidden">
+        {/* Cover Image Background */}
+        {business.coverImage ? (
+          <div className="absolute inset-0">
+            <Image
+              src={business.coverImage}
+              alt={`${business.name} cover`}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/30"></div>
+          </div>
+        ) : business.images && business.images.length > 0 ? (
+          <div className="absolute inset-0">
+            <Image
+              src={business.images[0]}
+              alt={`${business.name} cover`}
+              className="w-full h-full object-cover"
+            />
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/30"></div>
+          </div>
+        ) : (
+          /* Fallback gradient background */
+          <div className="absolute inset-0 bg-gradient-to-r from-[#05BBC8] to-[#049aa5]"></div>
+        )}
         {/* Back Button */}
         <div className="absolute top-4 left-4 z-10">
           <Button

@@ -45,6 +45,7 @@ export default function FindBusinessPage() {
 
   // Modal states
   const [activeModal, setActiveModal] = useState<'booking' | 'order' | 'negotiation' | null>(null)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedBusiness, setSelectedBusiness] = useState<any>(null)
 
   // Convert favorites to simple string array for compatibility
@@ -171,21 +172,22 @@ export default function FindBusinessPage() {
   }
 
   // Modal handlers
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleViewClick = (business: any) => {
     // Navigate to business detail page
     window.location.href = `/business/${business.id}`
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOrderClick = (business: any) => {
     setSelectedBusiness(business)
     setActiveModal('order')
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleBookClick = (business: any) => {
     setSelectedBusiness(business)
     setActiveModal('booking')
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleNegotiateClick = (business: any) => {
     setSelectedBusiness(business)
     setActiveModal('negotiation')
