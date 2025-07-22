@@ -230,6 +230,7 @@ export default function BusinessOnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [userInfoInitialized, setUserInfoInitialized] = useState(false);
   const [onboardingState, setOnboardingState] = useState<OnboardingState>({
     businesses: [createEmptyBusiness()],
     currentBusinessIndex: 0,
@@ -249,8 +250,8 @@ export default function BusinessOnboardingPage() {
   useEffect(() => {
     setHasMounted(true);
     
-    // Only update if user is authenticated and we haven't already set the user info
-    if (auth?.user && !onboardingState.userInfo.isExistingUser) {
+    // Only update if user is authenticated and we haven't already initialized user info
+    if (auth?.user && !userInfoInitialized) {
       setOnboardingState(prev => ({
         ...prev,
         userInfo: {
@@ -262,8 +263,9 @@ export default function BusinessOnboardingPage() {
           isExistingUser: true
         }
       }));
+      setUserInfoInitialized(true);
     }
-  }, [auth?.user, onboardingState.userInfo.isExistingUser]);
+  }, [auth?.user, userInfoInitialized]);
   
   // Check if user is authenticated
   const isAuthenticated = !!auth?.user;

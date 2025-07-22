@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useFavorites } from "@/hooks/use-favorites"
 
 // Import modular components
@@ -48,10 +48,10 @@ export default function FindBusinessPage() {
   const [selectedBusiness, setSelectedBusiness] = useState<any>(null)
 
   // Convert favorites to simple string array for compatibility
-  const favoriteIds = favorites.map(fav => fav.id)
+  const favoriteIds = useMemo(() => favorites.map(fav => fav.id), [favorites])
 
   // Filter businesses based on current filters and active tab
-  const filteredBusinesses = mockBusinesses.filter((business) => {
+  const filteredBusinesses = useMemo(() => mockBusinesses.filter((business) => {
     const matchesCity = filters.city === "All Cities" || business.city === filters.city
     const matchesType = filters.businessType === "All Types" || business.category === filters.businessType
     const matchesSearch =
@@ -67,10 +67,10 @@ export default function FindBusinessPage() {
       (activeTab === "nearby" && business.city === "Owerri") // Mock nearby logic
 
     return matchesCity && matchesType && matchesSearch && matchesTab
-  })
+  }), [filters, activeTab])
 
   // Sort businesses based on sort option
-  const sortedBusinesses = [...filteredBusinesses].sort((a, b) => {
+  const sortedBusinesses = useMemo(() => [...filteredBusinesses].sort((a, b) => {
     switch (filters.sortBy) {
       case "AI Recommended":
         return b.matchScore - a.matchScore
@@ -91,13 +91,15 @@ export default function FindBusinessPage() {
       default:
         return 0
     }
-  })
+  }), [filteredBusinesses, filters.sortBy])
 
   // Pagination logic
-  const totalPages = Math.ceil(sortedBusinesses.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const currentBusinesses = sortedBusinesses.slice(startIndex, endIndex)
+  const totalPages = useMemo(() => Math.ceil(sortedBusinesses.length / itemsPerPage), [sortedBusinesses.length, itemsPerPage])
+  const currentBusinesses = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return sortedBusinesses.slice(startIndex, endIndex)
+  }, [sortedBusinesses, currentPage, itemsPerPage])
 
   const handleToggleFavorite = (businessId: string) => {
     const business = mockBusinesses.find(b => b.id === businessId)

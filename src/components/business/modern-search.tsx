@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import { Search, Camera, MapPin, Filter, X, ChevronDown } from 'lucide-react'
 
 interface ModernSearchProps {
@@ -53,7 +53,9 @@ export default function ModernSearch({
   const locationInputRef = useRef<HTMLInputElement>(null)
 
   // Nigerian cities from your mock data
-  const cities = ['Owerri', 'Lagos', 'Abuja', 'Port Harcourt', 'Kano', 'Aba', 'Enugu', 'Ibadan', 'Kaduna', 'Jos']
+  const cities = useMemo(() => [
+    'Owerri', 'Lagos', 'Abuja', 'Port Harcourt', 'Kano', 'Aba', 'Enugu', 'Ibadan', 'Kaduna', 'Jos'
+  ], [])
   const categories = ['All Types', 'Restaurant', 'Hotel', 'Beauty & Spa', 'Repair Shop', 'Healthcare', 'Retail', 'Services']
   const priceRanges = ['Any Price', '₦1,000 - ₦5,000', '₦5,000 - ₦15,000', '₦15,000 - ₦50,000', '₦50,000+']
   const ratings = ['Any Rating', '4.5+ Stars', '4.0+ Stars', '3.5+ Stars', '3.0+ Stars']
@@ -104,8 +106,7 @@ export default function ModernSearch({
   }, [businesses])
 
   // Generate location suggestions
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const generateLocationSuggestions = (query: string) => {
+  const generateLocationSuggestions = useCallback((query: string) => {
     if (!query.trim() || query.length < 2) {
       setLocationSuggestions([])
       return
@@ -117,7 +118,7 @@ export default function ModernSearch({
     ).slice(0, 6)
 
     setLocationSuggestions(suggestions)
-  }
+  }, [cities])
 
   useEffect(() => {
     generateSearchSuggestions(searchQuery)
