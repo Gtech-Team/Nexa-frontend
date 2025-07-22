@@ -209,24 +209,7 @@ export default function FindBusinessPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <button
-                  type="button"
-                  onClick={() => window.history.back()}
-                  className="mr-3 rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#05BBC8] transition cursor-pointer hidden md:block"
-                  aria-label="Go back"
-                >
-                  {/* Lucide ArrowLeft icon */}
-                  <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 text-gray-700"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
-                  </svg>
-                </button>
+                
 
                 {/* Mobile Hamburger Menu */}
                 <div className="md:hidden">
