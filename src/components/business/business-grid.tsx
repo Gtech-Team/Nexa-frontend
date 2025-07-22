@@ -2,7 +2,16 @@ import { Search } from "lucide-react"
 import { BusinessGridProps } from "@/types/business"
 import BusinessCardMobile from "./business-card-mobile"
 
-export default function BusinessGrid({ businesses, favorites, onToggleFavorite, isLoading = false }: BusinessGridProps) {
+export default function BusinessGrid({ 
+  businesses, 
+  favorites, 
+  onToggleFavorite, 
+  isLoading = false,
+  onViewClick,
+  onOrderClick,
+  onBookClick,
+  onNegotiateClick
+}: BusinessGridProps) {
   if (isLoading) {
     return (
       <section>
@@ -73,6 +82,10 @@ export default function BusinessGrid({ businesses, favorites, onToggleFavorite, 
               business={business}
               onToggleFavorite={onToggleFavorite}
               isFavorite={favorites.includes(business.id)}
+              onViewClick={onViewClick}
+              onOrderClick={onOrderClick}
+              onBookClick={onBookClick}
+              onNegotiateClick={onNegotiateClick}
             />
           </div>
         ))}

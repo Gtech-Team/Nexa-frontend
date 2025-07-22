@@ -17,6 +17,9 @@ import NewAuthModal from "@/components/auth/new-auth-modal"
 import UserNav from "@/components/navigation/user-nav"
 import AnimatedSellButton from "@/components/animated-sell-button"
 import MobileHamburgerMenu from "@/components/mobile-hamburger-menu"
+import BookingModal from "@/components/business/booking-modal"
+import OrderModal from "@/components/business/order-modal"
+import NegotiationModal from "@/components/business/negotiation-modal"
 import { useAuth } from "@/components/auth/auth-provider"
 import Image from "next/image"
 
@@ -39,6 +42,10 @@ export default function FindBusinessPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [location, setLocation] = useState("Owerri, Nigeria")
   const itemsPerPage = 12
+
+  // Modal states
+  const [activeModal, setActiveModal] = useState<'booking' | 'order' | 'negotiation' | null>(null)
+  const [selectedBusiness, setSelectedBusiness] = useState<any>(null)
 
   // Convert favorites to simple string array for compatibility
   const favoriteIds = favorites.map(fav => fav.id)
@@ -161,6 +168,32 @@ export default function FindBusinessPage() {
     setCurrentPage(1)
   }
 
+  // Modal handlers
+  const handleViewClick = (business: any) => {
+    // Navigate to business detail page
+    window.location.href = `/business/${business.id}`
+  }
+
+  const handleOrderClick = (business: any) => {
+    setSelectedBusiness(business)
+    setActiveModal('order')
+  }
+
+  const handleBookClick = (business: any) => {
+    setSelectedBusiness(business)
+    setActiveModal('booking')
+  }
+
+  const handleNegotiateClick = (business: any) => {
+    setSelectedBusiness(business)
+    setActiveModal('negotiation')
+  }
+
+  const closeModal = () => {
+    setActiveModal(null)
+    setSelectedBusiness(null)
+  }
+
   return (
     
     <div className="min-h-screen bg-gray-50">
@@ -276,6 +309,10 @@ export default function FindBusinessPage() {
             businesses={currentBusinesses} 
             favorites={favoriteIds} 
             onToggleFavorite={handleToggleFavorite}
+            onViewClick={handleViewClick}
+            onOrderClick={handleOrderClick}
+            onBookClick={handleBookClick}
+            onNegotiateClick={handleNegotiateClick}
           />
         )}
 
@@ -313,6 +350,27 @@ export default function FindBusinessPage() {
         triggerAction={authModal.triggerAction}
         businessName={authModal.businessName}
       />
+
+      {/* Business Action Modals */}
+      {selectedBusiness && (
+        <>
+          <BookingModal
+            isOpen={activeModal === 'booking'}
+            onClose={closeModal}
+            business={selectedBusiness}
+          />
+          <OrderModal
+            isOpen={activeModal === 'order'}
+            onClose={closeModal}
+            business={selectedBusiness}
+          />
+          <NegotiationModal
+            isOpen={activeModal === 'negotiation'}
+            onClose={closeModal}
+            business={selectedBusiness}
+          />
+        </>
+      )}
     </div>
   )
 }

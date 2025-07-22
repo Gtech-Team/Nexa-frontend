@@ -84,6 +84,10 @@ export interface BusinessGridProps {
   favorites: string[]
   onToggleFavorite: (id: string) => void
   isLoading?: boolean
+  onViewClick?: (business: Business) => void
+  onOrderClick?: (business: Business) => void
+  onBookClick?: (business: Business) => void
+  onNegotiateClick?: (business: Business) => void
 }
 
 export interface AIRecommendationsProps {

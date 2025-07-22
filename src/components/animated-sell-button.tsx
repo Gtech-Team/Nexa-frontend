@@ -26,7 +26,12 @@ export default function AnimatedSellButton({ className = "" }: AnimatedSellButto
     }, [])
 
     const handleClick = () => {
-        router.push('/business-onboarding')
+        console.log("Sell on Nexa button clicked - navigating to business-onboarding")
+        try {
+            router.push('/business-onboarding')
+        } catch (error) {
+            console.error("Navigation error:", error)
+        }
     }
 
     return (
@@ -34,7 +39,7 @@ export default function AnimatedSellButton({ className = "" }: AnimatedSellButto
             {/* Animated text aligned left */}
             <div
             onClick={handleClick}
-            className="relative overflow-hidden cursor-pointer border-[#05BBC8] text-[#05BBC8] transition-all duration-300 hover:shadow-lg hover:scale-105 text-left"
+            className="relative overflow-hidden cursor-pointer border-[#05BBC8] text-[#05BBC8] transition-all duration-300 hover:shadow-lg hover:scale-105 text-left z-20"
             style={{ textAlign: "left" }}
             >
             <AnimatePresence mode="wait">

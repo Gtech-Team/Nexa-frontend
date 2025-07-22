@@ -10,11 +10,32 @@ interface BusinessCardMobileProps {
   business: Business
   onToggleFavorite: (id: string) => void
   isFavorite: boolean
+  onViewClick?: (business: Business) => void
+  onOrderClick?: (business: Business) => void
+  onBookClick?: (business: Business) => void
+  onNegotiateClick?: (business: Business) => void
 }
 
-export default function BusinessCardMobile({ business, onToggleFavorite, isFavorite }: BusinessCardMobileProps) {
+export default function BusinessCardMobile({ 
+  business, 
+  onToggleFavorite, 
+  isFavorite, 
+  onViewClick,
+  onOrderClick,
+  onBookClick,
+  onNegotiateClick 
+}: BusinessCardMobileProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const router = useRouter()
+
+  const handleNavigation = (path: string) => {
+    console.log("Navigating to:", path)
+    try {
+      router.push(path)
+    } catch (error) {
+      console.error("Navigation error:", error)
+    }
+  }
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full">
@@ -109,18 +130,16 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
                   <Verified className="w-3 h-3 text-blue-500 fill-blue-500 flex-shrink-0" />
                 )}
               </div>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <div className="flex items-center gap-1">
-                  {business.verified && (
-                    <div className="bg-blue-100 text-blue-800 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full">
-                      <Check className="w-2.5 h-2.5" />
-                      <span>Verified</span>
-                    </div>
-                  )}
-                  <span className="bg-gray-100 px-2 py-0.5 rounded-full truncate">
-                    {business.category}
-                  </span>
-                </div>
+              <div className="flex items-center gap-1 text-xs text-gray-500 flex-wrap">
+                {business.verified && (
+                  <div className="bg-blue-100 text-blue-800 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                    <Check className="w-2.5 h-2.5" />
+                    <span>Verified</span>
+                  </div>
+                )}
+                <span className="bg-gray-100 px-2 py-0.5 rounded-full text-xs max-w-full break-words">
+                  {business.category}
+                </span>
               </div>
             </div>
           </div>
@@ -146,22 +165,28 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
 
         {/* Price */}
         <div className="mb-3 pt-2 border-t border-gray-50">
-          <div className="text-center">
+          <div className="text-left">
             <span className="font-bold text-[#05BBC8] text-sm">{business.price}</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2 w-full">
+        <div className="flex gap-2 w-full relative z-10">
           {/* View Button */}
           <button 
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              console.log("Navigating to business ID:", business.id)
-              router.push(`/business/${business.id}`)
+              console.log("View button clicked - Navigating to business ID:", business.id)
+              
+              // Use callback if provided, otherwise navigate
+              if (onViewClick) {
+                onViewClick(business)
+              } else {
+                handleNavigation(`/business/${business.id}`)
+              }
             }}
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs relative z-10"
           >
             <Eye className="w-3 h-3" />
             <span>View</span>
@@ -175,7 +200,14 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
               case "order":
                 return (
                   <button 
-                    onClick={(e) => e.stopPropagation()} 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log("Order button clicked for business:", business.id)
+                      if (onOrderClick) {
+                        onOrderClick(business)
+                      }
+                    }} 
                     className={btnClass}
                   >
                     <ShoppingCart className="w-3 h-3" />
@@ -185,7 +217,14 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
               case "booking":
                 return (
                   <button 
-                    onClick={(e) => e.stopPropagation()} 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log("Book button clicked for business:", business.id)
+                      if (onBookClick) {
+                        onBookClick(business)
+                      }
+                    }} 
                     className={btnClass}
                   >
                     <Calendar className="w-3 h-3" />
@@ -195,7 +234,14 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
               case "negotiation":
                 return (
                   <button 
-                    onClick={(e) => e.stopPropagation()} 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log("Negotiate button clicked for business:", business.id)
+                      if (onNegotiateClick) {
+                        onNegotiateClick(business)
+                      }
+                    }} 
                     className={btnClass}
                   >
                     <MessageCircle className="w-3 h-3" />

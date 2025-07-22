@@ -237,32 +237,33 @@ export default function BusinessOnboardingPage() {
     isAddingNewBusiness: false,
     isAddingNewBranch: false,
     userInfo: {
-      fullName: auth?.user?.fullName || "",
-      email: auth?.user?.email || "",
-      phone: auth?.user?.phone || "",
+      fullName: "",
+      email: "",
+      phone: "",
       password: "",
-      city: auth?.user?.city || "",
-      isExistingUser: !!auth?.user
+      city: "",
+      isExistingUser: false
     }
   });
 
   useEffect(() => {
     setHasMounted(true);
     
-    // If user is already authenticated, update the onboarding state
-    if (auth?.user) {
+    // Only update if user is authenticated and we haven't already set the user info
+    if (auth?.user && !onboardingState.userInfo.isExistingUser) {
       setOnboardingState(prev => ({
         ...prev,
         userInfo: {
           fullName: auth.user?.fullName || "",
           email: auth.user?.email || "",
           phone: auth.user?.phone || "",
+          password: prev.userInfo.password,
           city: auth.user?.city || "",
           isExistingUser: true
         }
       }));
     }
-  }, [auth?.user]);
+  }, [auth?.user, onboardingState.userInfo.isExistingUser]);
   
   // Check if user is authenticated
   const isAuthenticated = !!auth?.user;
