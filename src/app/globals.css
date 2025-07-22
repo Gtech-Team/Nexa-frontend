@@ -210,10 +210,20 @@
     border-color: hsl(var(--border));
     outline-color: hsl(var(--ring) / 0.5);
   }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: 'Inter', sans-serif;
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', sans-serif;
+}
 
+/* Custom scrollbar utilities */
+@layer utilities {
+  .scrollbar-hide {
+    /* Firefox */
+    scrollbar-width: none;
+    /* Safari and Chrome */
   }
-
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
