@@ -17,10 +17,10 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
   const router = useRouter()
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer" onClick={() => router.push(`/business/${business.id}`)}>
-      {/* If card is featured, add yellow border */}
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full">
+      {/* Featured border overlay - only show if featured */}
       {business.featured && (
-        <div className="absolute inset-0 rounded-2xl ring-2 ring-yellow-400/50 pointer-events-none"></div>
+        <div className="absolute inset-0 rounded-2xl ring-1 ring-yellow-400/30 pointer-events-none z-0"></div>
       )}
       {/* Business Image */}
       <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200">
@@ -144,66 +144,68 @@ export default function BusinessCardMobile({ business, onToggleFavorite, isFavor
           {business.description}
         </p>
 
-        {/* Price and Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-          <div className="text-xs">
-            <span className="font-bold text-[#05BBC8]">{business.price}</span>
+        {/* Price */}
+        <div className="mb-3 pt-2 border-t border-gray-50">
+          <div className="text-center">
+            <span className="font-bold text-[#05BBC8] text-sm">{business.price}</span>
           </div>
-          
-          <div className="flex gap-2">
-            {/* View Button */}
-            <button 
-              onClick={(e) => {
-                e.stopPropagation() // Prevent card click from triggering
-                console.log("Navigating to business ID:", business.id)
-                router.push(`/business/${business.id}`)
-              }}
-              className="flex items-center gap-1 px-3 py-1.5 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs"
-            >
-              <Eye className="w-3 h-3" />
-              <span>View</span>
-            </button>
+        </div>
 
-            {/* Dynamic Button based on business type */}
-            {(() => {
-              const btnClass = "flex items-center gap-1 px-3 py-1.5 bg-[#05BBC8] text-white rounded-lg hover:bg-[#049aa5] transition-colors text-xs";
-              
-              switch(business.type) {
-                case "order":
-                  return (
-                    <button 
-                      onClick={(e) => e.stopPropagation()} 
-                      className={btnClass}
-                    >
-                      <ShoppingCart className="w-3 h-3" />
-                      <span>Order</span>
-                    </button>
-                  );
-                case "booking":
-                  return (
-                    <button 
-                      onClick={(e) => e.stopPropagation()} 
-                      className={btnClass}
-                    >
-                      <Calendar className="w-3 h-3" />
-                      <span>Book</span>
-                    </button>
-                  );
-                case "negotiation":
-                  return (
-                    <button 
-                      onClick={(e) => e.stopPropagation()} 
-                      className={btnClass}
-                    >
-                      <MessageCircle className="w-3 h-3" />
-                      <span>Negotiate</span>
-                    </button>
-                  );
-                default:
-                  return null;
-              }
-            })()}
-          </div>
+        {/* Action Buttons */}
+        <div className="flex gap-2 w-full">
+          {/* View Button */}
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              console.log("Navigating to business ID:", business.id)
+              router.push(`/business/${business.id}`)
+            }}
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs"
+          >
+            <Eye className="w-3 h-3" />
+            <span>View</span>
+          </button>
+
+          {/* Dynamic Button based on business type */}
+          {(() => {
+            const btnClass = "flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-[#05BBC8] text-white rounded-lg hover:bg-[#049aa5] transition-colors text-xs";
+            
+            switch(business.type) {
+              case "order":
+                return (
+                  <button 
+                    onClick={(e) => e.stopPropagation()} 
+                    className={btnClass}
+                  >
+                    <ShoppingCart className="w-3 h-3" />
+                    <span>Order</span>
+                  </button>
+                );
+              case "booking":
+                return (
+                  <button 
+                    onClick={(e) => e.stopPropagation()} 
+                    className={btnClass}
+                  >
+                    <Calendar className="w-3 h-3" />
+                    <span>Book</span>
+                  </button>
+                );
+              case "negotiation":
+                return (
+                  <button 
+                    onClick={(e) => e.stopPropagation()} 
+                    className={btnClass}
+                  >
+                    <MessageCircle className="w-3 h-3" />
+                    <span>Negotiate</span>
+                  </button>
+                );
+              default:
+                return null;
+            }
+          })()}
         </div>
       </div>
     </div>
