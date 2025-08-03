@@ -41,7 +41,7 @@ export default function BusinessCardMobile({
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full">
       {/* Featured border overlay - only show if featured */}
       {business.featured && (
-        <div className="absolute inset-0 rounded-2xl ring-1 ring-yellow-400/30 pointer-events-none z-0"></div>
+        <div className="absolute inset-0 rounded-2xl  pointer-events-none z-0"></div>
       )}
       {/* Business Image */}
       <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200">
