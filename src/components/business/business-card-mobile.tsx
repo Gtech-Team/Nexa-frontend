@@ -186,7 +186,7 @@ export default function BusinessCardMobile({
                 handleNavigation(`/business/${business.id}`)
               }
             }}
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs relative z-10"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 text-gray-700 rounded-lg hover:border-[#05BBC8] hover:text-[#05BBC8] transition-colors text-xs relative z-10 cursor-pointer"
           >
             <Eye className="w-3 h-3" />
             <span>View</span>

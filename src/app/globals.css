@@ -206,10 +206,86 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-  * {
+/* ========================================
+   GLOBAL BORDER STYLING OPTIONS
+   Uncomment ONE of the options below to apply borders globally
+   ======================================== */
+
+/* Option 1: Original black borders (commented out by default) */
+/* * {
     border-color: hsl(var(--border));
     outline-color: hsl(var(--ring) / 0.5);
-  }
+  } */
+
+/* Option 2: Subtle gray borders (recommended) */
+/* * {
+    border-color: hsl(var(--border));
+    outline-color: hsl(var(--ring) / 0.2);
+  } */
+
+/* Option 3: Brand color accents for focus states only */
+/* *:focus-visible {
+    outline-color: #05BBC8;
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: 2px;
+  } */
+
+/* Option 4: Ultra-subtle borders with lighter opacity */
+/* * {
+    border-color: hsl(var(--border) / 0.3);
+    outline-color: hsl(var(--ring) / 0.1);
+  } */
+
+/* Option 5: No global borders (current clean look) - DEFAULT */
+/* Keep this section empty for the current clean appearance */
+
+/* Option 6: Brand-aligned border system - ACTIVE */
+* {
+  border-color: rgba(5, 187, 200, 0.15); /* Very light brand color for subtle borders */
+}
+
+/* Enhanced focus states with brand colors */
+*:focus-visible {
+  outline-color: #05BBC8;
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 1px;
+  border-color: rgba(5, 187, 200, 0.3);
+}
+
+/* Button and interactive element borders */
+button, 
+input, 
+select, 
+textarea,
+[role="button"] {
+  border-color: rgba(5, 187, 200, 0.2);
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Hover states for interactive elements */
+button:hover, 
+input:hover, 
+select:hover, 
+textarea:hover,
+[role="button"]:hover {
+  border-color: rgba(5, 187, 200, 0.4);
+}
+
+/* Card and container borders */
+[class*="card"],
+[class*="border"],
+.border {
+  border-color: rgba(5, 187, 200, 0.12) !important;
+}
+
+/* Active/selected states */
+[aria-selected="true"],
+[data-state="active"],
+.active {
+  border-color: rgba(5, 187, 200, 0.6) !important;
+}
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
