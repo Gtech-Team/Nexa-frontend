@@ -186,7 +186,7 @@ export default function AdminLayout({
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>Profile Settings</DropdownMenuItem>
@@ -201,7 +201,7 @@ export default function AdminLayout({
           </div>
 
           {/* Page content */}
-          <main className="py-6">
+          <main className="py-6 bg-gray-50 min-h-screen">
             <div className="px-4 sm:px-6 lg:px-8">{children}</div>
           </main>
         </div>

@@ -232,7 +232,7 @@ export default function FindBusinessPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 11.37a11.045 11.045 0 005.516 5.516l1.983-4.064a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V6z" />
               </svg>
               <a href="tel:08160821253" className="font-medium text-xs hover:text-[#05BBC8] transition-colors">
-                08160821253
+                09036892014
               </a>
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function FindBusinessPage() {
               <div className="hidden md:block text-gray-500">|</div>
               <h1 className="hidden md:block text-lg font-medium text-gray-900">Find a Business</h1>
               {/* Mobile title */}
-              <h1 className="block md:hidden text-lg font-medium text-gray-900 ml-2">Find Business</h1>
+              <h1 className="block md:hidden text-lg font-medium text-gray-900 dark:text-white ml-2">Find Business</h1>
             </div>
             
             {/* User Navigation */}

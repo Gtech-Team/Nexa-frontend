@@ -19,7 +19,7 @@ export default function UserNav() {
 
   if (!isAuthenticated) {
     return (
-      <>
+      <div className="flex items-center space-x-2">
         <Button
           onClick={() => showAuthModal()}
           variant="ghost"
@@ -34,12 +34,12 @@ export default function UserNav() {
           triggerAction={authModal.triggerAction}
           businessName={authModal.businessName}
         />
-      </>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="flex items-center space-x-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center space-x-3 hover:bg-gray-50 px-3 py-2 rounded-lg">
@@ -150,6 +150,6 @@ export default function UserNav() {
         triggerAction={authModal.triggerAction}
         businessName={authModal.businessName}
       />
-    </>
+    </div>
   )
 }

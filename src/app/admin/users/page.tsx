@@ -188,17 +188,19 @@ export default function UsersManager() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-h-screen bg-white p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Users Manager</h1>
           <p className="text-gray-600 mt-1">Manage all users on the Nexa platform</p>
         </div>
-        <Button className="bg-[#05BBC8] hover:bg-[#05BBC8]/90">
-          <TrendingUp className="h-4 w-4 mr-2" />
-          Export Users
-        </Button>
+        <div className="flex items-center space-x-4">
+          <Button className="bg-[#05BBC8] hover:bg-[#05BBC8]/90">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Export Users
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -277,7 +279,7 @@ export default function UsersManager() {
                 <SelectTrigger className="w-full sm:w-[140px]">
                   <SelectValue placeholder="Role" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg">
                   <SelectItem value="all">All Roles</SelectItem>
                   <SelectItem value="customer">Customer</SelectItem>
                   <SelectItem value="business_owner">Business Owner</SelectItem>
@@ -288,7 +290,7 @@ export default function UsersManager() {
                 <SelectTrigger className="w-full sm:w-[140px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg">
                   <SelectItem value="all">All Status</SelectItem>
                   <SelectItem value="active">Active</SelectItem>
                   <SelectItem value="suspended">Suspended</SelectItem>
@@ -429,7 +431,7 @@ export default function UsersManager() {
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>
                             <Eye className="h-4 w-4 mr-2" />
@@ -488,7 +490,7 @@ export default function UsersManager() {
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                         <DropdownMenuItem>
                           <Eye className="h-4 w-4 mr-2" />
                           View Profile

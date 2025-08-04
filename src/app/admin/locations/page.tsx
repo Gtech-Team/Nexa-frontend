@@ -231,8 +231,8 @@ export default function LocationsManager() {
           <Card>
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <div className="flex-1 w-full sm:w-auto">
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1">
+                  <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       placeholder="Search cities..."
@@ -240,6 +240,10 @@ export default function LocationsManager() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
                     />
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="show-featured" className="text-sm font-medium whitespace-nowrap">Show Featured Only</Label>
+                    <Switch id="show-featured" />
                   </div>
                 </div>
                 <Dialog open={isAddCityOpen} onOpenChange={setIsAddCityOpen}>
@@ -351,7 +355,7 @@ export default function LocationsManager() {
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem>
@@ -574,7 +578,7 @@ export default function LocationsManager() {
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem>

@@ -216,7 +216,7 @@ export default function BusinessesManager() {
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg">
                   <SelectItem value="all">All Status</SelectItem>
                   <SelectItem value="active">Active</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
@@ -227,7 +227,7 @@ export default function BusinessesManager() {
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="City" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg">
                   <SelectItem value="all">All Cities</SelectItem>
                   <SelectItem value="lagos">Lagos</SelectItem>
                   <SelectItem value="abuja">Abuja</SelectItem>
@@ -389,7 +389,7 @@ export default function BusinessesManager() {
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>

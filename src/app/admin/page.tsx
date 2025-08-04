@@ -223,7 +223,7 @@ export default function AdminDashboard() {
               <div key={city.name} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                    <span className="text-sm font-medium text-gray-600">#{index + 1}</span>
+                    <span className="text-sm font-medium text-gray-600">{index + 1}</span>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">{city.name}</p>

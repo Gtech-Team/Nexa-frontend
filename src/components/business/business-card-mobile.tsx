@@ -199,20 +199,20 @@ export default function BusinessCardMobile({
             switch(business.type) {
               case "order":
                 return (
-                  <button 
+                    <button 
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                       console.log("Order button clicked for business:", business.id)
                       if (onOrderClick) {
-                        onOrderClick(business)
+                      onOrderClick(business)
                       }
                     }} 
-                    className={btnClass}
-                  >
+                    className={`${btnClass} cursor-pointer`}
+                    >
                     <ShoppingCart className="w-3 h-3" />
                     <span>Order</span>
-                  </button>
+                    </button>
                 );
               case "booking":
                 return (
@@ -225,7 +225,7 @@ export default function BusinessCardMobile({
                         onBookClick(business)
                       }
                     }} 
-                    className={btnClass}
+                    className={`${btnClass} cursor-pointer`}
                   >
                     <Calendar className="w-3 h-3" />
                     <span>Book</span>
@@ -242,7 +242,7 @@ export default function BusinessCardMobile({
                         onNegotiateClick(business)
                       }
                     }} 
-                    className={btnClass}
+                    className={`${btnClass} cursor-pointer`}
                   >
                     <MessageCircle className="w-3 h-3" />
                     <span>Negotiate</span>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Save,
   Settings as SettingsIcon,
@@ -37,6 +37,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function AdminSettings() {
+  const [hasMounted, setHasMounted] = useState(false)
   const [showApiKey, setShowApiKey] = useState(false)
   const [settings, setSettings] = useState({
     // General Settings
@@ -85,6 +86,22 @@ export default function AdminSettings() {
     maintenanceMessage: "We're performing scheduled maintenance. Please check back soon.",
   })
 
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#05BBC8] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading admin settings...</p>
+        </div>
+      </div>
+    )
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSettingChange = (key: string, value: any) => {
     setSettings(prev => ({
@@ -99,8 +116,10 @@ export default function AdminSettings() {
   }
 
   const generateApiKey = () => {
-    const newKey = `nexa_${Math.random().toString(36).substring(2, 15)}_${Math.random().toString(36).substring(2, 15)}`
-    handleSettingChange('apiKey', newKey)
+    if (typeof window !== 'undefined') {
+      const newKey = `nexa_${Math.random().toString(36).substring(2, 15)}_${Math.random().toString(36).substring(2, 15)}`
+      handleSettingChange('apiKey', newKey)
+    }
   }
 
   const copyToClipboard = (text: string) => {
@@ -118,13 +137,43 @@ export default function AdminSettings() {
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="business">Business</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
+        <TabsList className="flex items-center space-x-1 bg-white rounded-lg p-1 border border-gray-200 w-full overflow-x-auto h-auto">
+          <TabsTrigger 
+            value="general"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            ⚙️ General
+          </TabsTrigger>
+          <TabsTrigger 
+            value="notifications"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            🔔 Notifications
+          </TabsTrigger>
+          <TabsTrigger 
+            value="business"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            🏢 Business
+          </TabsTrigger>
+          <TabsTrigger 
+            value="security"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            🔒 Security
+          </TabsTrigger>
+          <TabsTrigger 
+            value="payments"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            💳 Payments
+          </TabsTrigger>
+          <TabsTrigger 
+            value="integrations"
+            className="px-3 sm:px-6 py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-pointer data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:text-gray-900 data-[state=inactive]:hover:bg-gray-50"
+          >
+            🔗 Integrations
+          </TabsTrigger>
         </TabsList>
 
         {/* General Settings */}
@@ -192,7 +241,7 @@ export default function AdminSettings() {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg">
                       <SelectItem value="Africa/Lagos">Africa/Lagos (WAT)</SelectItem>
                       <SelectItem value="UTC">UTC</SelectItem>
                       <SelectItem value="America/New_York">America/New_York (EST)</SelectItem>
@@ -205,7 +254,7 @@ export default function AdminSettings() {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg">
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="ha">Hausa</SelectItem>
                       <SelectItem value="ig">Igbo</SelectItem>
@@ -217,6 +266,46 @@ export default function AdminSettings() {
                   <Button onClick={handleSaveSettings} className="w-full">
                     <Save className="h-4 w-4 mr-2" />
                     Save General Settings
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Zap className="h-5 w-5 mr-2" />
+                  System Controls
+                </CardTitle>
+                <CardDescription>Platform system status and controls</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="maintenanceMode">Maintenance Mode</Label>
+                    <p className="text-sm text-gray-500">Enable to put the platform in maintenance mode</p>
+                  </div>
+                  <Switch
+                    id="maintenanceMode"
+                    checked={settings.maintenanceMode}
+                    onCheckedChange={(checked) => handleSettingChange('maintenanceMode', checked)}
+                  />
+                </div>
+                {settings.maintenanceMode && (
+                  <div>
+                    <Label htmlFor="maintenanceMessage">Maintenance Message</Label>
+                    <Textarea
+                      id="maintenanceMessage"
+                      value={settings.maintenanceMessage}
+                      onChange={(e) => handleSettingChange('maintenanceMessage', e.target.value)}
+                      rows={2}
+                    />
+                  </div>
+                )}
+                <div className="pt-4">
+                  <Button onClick={handleSaveSettings} className="w-full">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save System Settings
                   </Button>
                 </div>
               </CardContent>

@@ -429,7 +429,7 @@ export default function RevenueManager() {
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>
                             <Eye className="mr-2 h-4 w-4" />
@@ -477,7 +477,7 @@ export default function RevenueManager() {
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-white border border-gray-200 shadow-lg">
                         <DropdownMenuItem>
                           <Eye className="mr-2 h-4 w-4" />
                           View Details

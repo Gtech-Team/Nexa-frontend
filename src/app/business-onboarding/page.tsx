@@ -178,8 +178,12 @@ const defaultWorkingHours: WorkingHours = {
   Sunday: { open: "10:00", close: "16:00", closed: true },
 };
 
+// Use a counter instead of Date.now() to prevent hydration issues
+let idCounter = 1;
+const generateId = () => `id_${idCounter++}`;
+
 const createEmptyBusiness = (): BusinessProfile => ({
-  id: Date.now().toString(),
+  id: generateId(),
   type: "",
   name: "",
   description: "",
@@ -196,7 +200,7 @@ const createEmptyBusiness = (): BusinessProfile => ({
   deliveryAvailable: false,
   branches: [
     {
-      id: Date.now().toString(),
+      id: generateId(),
       name: "Main Branch",
       address: "",
       city: "",
@@ -211,7 +215,7 @@ const createEmptyBusiness = (): BusinessProfile => ({
 });
 
 const createEmptyBranch = (businessName: string): BusinessBranch => ({
-  id: Date.now().toString(),
+  id: generateId(),
   name: `${businessName} - New Branch`,
   address: "",
   city: "",
@@ -266,6 +270,18 @@ export default function BusinessOnboardingPage() {
       setUserInfoInitialized(true);
     }
   }, [auth?.user, userInfoInitialized]);
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#05BBC8] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
   
   // Check if user is authenticated
   const isAuthenticated = !!auth?.user;
@@ -608,7 +624,7 @@ export default function BusinessOnboardingPage() {
 
   const addProduct = () => {
     const newProduct: Product = {
-      id: Date.now().toString(),
+      id: generateId(),
       name: "",
       price: "",
       category: "",
@@ -815,7 +831,7 @@ export default function BusinessOnboardingPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           <div className="space-y-4 sm:space-y-6">
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-5 sm:space-y-6">
               {!onboardingState.isAddingNewBranch && (
                 <>
                   <AnimatedInput
@@ -834,9 +850,9 @@ export default function BusinessOnboardingPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="mb-5"
+                    className="mb-6"
                   >
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-white mb-3">
                       Business Description <span className="text-[#05BBC8]">*</span>
                     </label>
                     <Textarea
@@ -845,7 +861,7 @@ export default function BusinessOnboardingPage() {
                       onChange={(e) =>
                         updateCurrentBusiness({ description: e.target.value })
                       }
-                      className="bg-gray-900/50 backdrop-blur-md border-gray-800 focus:border-[#05BBC8] text-white min-h-[100px]"
+                      className="bg-gray-800/90 backdrop-blur-sm border-gray-600 text-white focus:border-[#05BBC8] focus:ring-2 focus:ring-[#05BBC8]/20 hover:bg-gray-800 min-h-[100px] placeholder:text-gray-400"
                     />
                   </motion.div>
                 </>
@@ -905,13 +921,13 @@ export default function BusinessOnboardingPage() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full justify-between bg-gray-800 border-gray-700 text-white"
+                      className="w-full justify-between bg-gray-800/90 border-gray-600 text-white hover:bg-gray-700 focus:border-[#05BBC8] focus:ring-2 focus:ring-[#05BBC8]/20"
                     >
                       {currentBranch.city || "Select city"}
                       <ChevronDown className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-gray-800 border-gray-700">
+                  <DropdownMenuContent className="bg-gray-800 border-gray-600 shadow-lg">
                     {cities.map((city) => (
                       <DropdownMenuItem
                         key={city}
@@ -1802,8 +1818,7 @@ export default function BusinessOnboardingPage() {
               </div>
               <div className="text-left space-y-2 text-sm text-gray-300">
                 <div>
-                  Business ID: #NX
-                  {Math.random().toString(36).substr(2, 6).toUpperCase()}
+                  Business ID: #NX{business.id.replace('id_', '').padStart(6, '0').toUpperCase()}
                 </div>
                 <div>Branches: {business.branches.length}</div>
                 <div>

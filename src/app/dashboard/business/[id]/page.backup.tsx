@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   Dialog,
@@ -344,9 +345,9 @@ export default function BusinessManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -401,6 +402,8 @@ export default function BusinessManagementPage() {
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4" />
               </Button>
+
+              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -409,41 +412,41 @@ export default function BusinessManagementPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-white border border-gray-200 rounded-lg p-1 w-full grid grid-cols-6 lg:grid-cols-12 gap-1">
-            <TabsTrigger value="overview" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+          <TabsList className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 w-full grid grid-cols-6 lg:grid-cols-12 gap-1">
+            <TabsTrigger value="overview" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="branches" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="branches" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Branches
             </TabsTrigger>
-            <TabsTrigger value="products" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="products" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Products
             </TabsTrigger>
-            <TabsTrigger value="bookings" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="bookings" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Bookings
             </TabsTrigger>
-            <TabsTrigger value="orders" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="orders" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Orders
             </TabsTrigger>
-            <TabsTrigger value="reviews" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="reviews" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Reviews
             </TabsTrigger>
-            <TabsTrigger value="inventory" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="inventory" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Inventory
             </TabsTrigger>
-            <TabsTrigger value="invoices" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="invoices" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Invoices
             </TabsTrigger>
-            <TabsTrigger value="negotiations" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="negotiations" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Negotiations
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="analytics" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Analytics
             </TabsTrigger>
-            <TabsTrigger value="landing" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="landing" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Landing Page
             </TabsTrigger>
-            <TabsTrigger value="roles" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white cursor-pointer">
+            <TabsTrigger value="roles" className="text-xs data-[state=active]:bg-[#05BBC8] data-[state=active]:text-white">
               Roles
             </TabsTrigger>
           </TabsList>
@@ -694,7 +697,7 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-           
+            </div>
           </TabsContent>
 
           {/* Orders Tab */}
@@ -779,23 +782,25 @@ export default function BusinessManagementPage() {
                     </div>
                   ))}
                 </div>
-            </CardContent>
+              </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Reviews Tab */}
-          <TabsContent value="reviews" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Customer Reviews</h2>
-              <div className="flex items-center space-x-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold">
-                    {branchReviews.length > 0
-                    ? (branchReviews.reduce((sum, r) => sum + r.rating, 0) / branchReviews.length).toFixed(1)
-                    : "0.0"}
-                </p>
-                <p className="text-sm text-gray-600">Average Rating</p>
-              </div>
+          {activeTab === "reviews" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Customer Reviews</h2>
+                <div className="flex items-center space-x-4">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold">
+                      {branchReviews.length > 0
+                      ? (branchReviews.reduce((sum, r) => sum + r.rating, 0) / branchReviews.length).toFixed(1)
+                      : "0.0"}
+                  </p>
+                  <p className="text-sm text-gray-600">Average Rating</p>
+                </div>
               </div>
             </div>
 
@@ -837,12 +842,14 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Negotiations Tab */}
-          <TabsContent value="negotiations" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Price Negotiations</h2>
+          {activeTab === "negotiations" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Price Negotiations</h2>
                 <div className="flex items-center space-x-2">
                 <Switch />
                 <span className="text-sm">Allow Negotiations</span>
@@ -943,11 +950,13 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Inventory Tab */}
-          <TabsContent value="inventory" className="space-y-6">
-            <div className="flex items-center justify-between">
+          {activeTab === "inventory" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Inventory Management</h2>
                 <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-white">
                   <Plus className="w-4 h-4 mr-2" />
@@ -997,10 +1006,12 @@ export default function BusinessManagementPage() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Invoices Tab */}
-          <TabsContent value="invoices" className="space-y-6">
+          {activeTab === "invoices" && (
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Invoice Generator</h2>
               <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-white">
@@ -1036,10 +1047,12 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-6">
+          {activeTab === "analytics" && (
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Business Analytics</h2>
               <div className="flex items-center space-x-2">
@@ -1180,10 +1193,12 @@ export default function BusinessManagementPage() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Landing Page Tab */}
-          <TabsContent value="landing" className="space-y-6">
+          {activeTab === "landing" && (
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Landing Page Editor</h2>
               <div className="flex items-center space-x-2">
@@ -1276,10 +1291,12 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Roles Tab */}
-          <TabsContent value="roles" className="space-y-6">
+          {activeTab === "roles" && (
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Team & Role Management</h2>
               <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-white">
@@ -1418,10 +1435,12 @@ export default function BusinessManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+            </div>
+          )}
 
           {/* Branches Tab */}
-          <TabsContent value="branches" className="space-y-6">
+          {activeTab === "branches" && (
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Branch Management</h2>
               <Button className="bg-[#05BBC8] hover:bg-[#049aa5] text-white">
@@ -1518,8 +1537,8 @@ export default function BusinessManagementPage() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
-        </Tabs>
+          )}
+        </div>
       </main>
     </div>
   )

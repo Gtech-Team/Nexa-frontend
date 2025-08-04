@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AnimatedInputProps {
   label: string;
@@ -35,12 +37,15 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
   delay = 0,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
   
   const hasValue = value && value.length > 0;
   const showError = error && error.length > 0;
+  const isPasswordField = type === "password";
+  const inputType = isPasswordField ? (showPassword ? "text" : "password") : type;
 
   return (
     <motion.div 
@@ -49,18 +54,18 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
     >
-      <div className="relative">
+      <div className="relative pt-5">
         <motion.label
           htmlFor={name}
-          className={`absolute left-3 pointer-events-none transition-all duration-200 ${
+          className={`absolute left-3 pointer-events-none transition-all duration-200 z-10 ${
             isFocused || hasValue
-              ? 'text-xs -translate-y-[14px] text-[#05BBC8]'
-              : 'text-sm translate-y-2 text-gray-400'
+              ? 'text-xs top-0 text-[#05BBC8] font-medium'
+              : 'text-sm top-5 text-gray-400'
           }`}
           animate={{
             fontSize: isFocused || hasValue ? "0.75rem" : "0.875rem",
-            transform: isFocused || hasValue ? "translateY(-14px)" : "translateY(10px)",
-            color: isFocused ? "var(--color-primary)" : hasValue ? "white" : "rgb(156 163 175)",
+            transform: isFocused || hasValue ? "translateY(0px)" : "translateY(8px)",
+            color: isFocused ? "#05BBC8" : hasValue ? "#05BBC8" : "rgb(156 163 175)",
           }}
           transition={{ duration: 0.15 }}
         >
@@ -71,7 +76,7 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
         <Input
           id={name}
           name={name}
-          type={type}
+          type={inputType}
           value={value}
           onChange={onChange}
           onFocus={handleFocus}
@@ -79,11 +84,26 @@ export const AnimatedInput: React.FC<AnimatedInputProps> = ({
           disabled={disabled}
           autoFocus={autoFocus}
           placeholder={isFocused ? placeholder : ""}
-          className={`h-14 px-3 pt-4 pb-2 bg-gray-900/50 backdrop-blur-md border-gray-800 
-            focus:border-[#05BBC8] focus:ring-[#05BBC8]/20 
-            ${showError ? "border-red-500" : ""} 
-            placeholder:text-gray-500`}
+          className={`h-12 px-3 pt-6 pb-2 bg-gray-800/90 backdrop-blur-sm border-gray-600 text-white 
+            focus:border-[#05BBC8] focus:ring-2 focus:ring-[#05BBC8]/20 focus:bg-gray-800
+            hover:bg-gray-800 hover:border-gray-500 transition-all duration-200
+            ${showError ? "border-red-500 focus:border-red-500" : ""} 
+            ${isPasswordField ? "pr-12" : ""}
+            placeholder:text-gray-400`}
         />
+        
+        {isPasswordField && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="absolute right-2 top-6 h-8 w-8 p-0 text-gray-400 hover:text-gray-300 hover:bg-transparent z-20"
+            onClick={() => setShowPassword(!showPassword)}
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
+        )}
       </div>
       
       {showError && (
